@@ -26,7 +26,7 @@ func (seq TODOs) Value(i int) interface{} { return seq[i] }
 //
 func TestList() gurl.Arrow {
 	var seq TODOs
-	item := TODO{ID: "#1", Title: "study assay.it"}
+	item := TODO{ID: "1", Title: "study assay.it"}
 
 	return gurl.HTTP(
 		ø.GET("https://%s/api/todo", host),
@@ -43,11 +43,11 @@ func TestLookup() gurl.Arrow {
 	var item TODO
 
 	return gurl.HTTP(
-		ø.GET("https://%s/api/todo/%s", host, "#1"),
+		ø.GET("https://%s/api/todo/%s", host, "1"),
 		ƒ.Code(200),
 		ƒ.ServedJSON(),
 		ƒ.Recv(&item),
-		ƒ.Value(&item.ID).String("#1"),
+		ƒ.Value(&item.ID).String("1"),
 		ƒ.Value(&item.Title).String("study assay.it"),
 	)
 }
@@ -64,7 +64,7 @@ func TestNotFound() gurl.Arrow {
 //
 //
 func TestLifeCycle() gurl.Arrow {
-	item := TODO{ID: "#4", Title: "have fun!"}
+	item := TODO{ID: "4", Title: "have fun!"}
 
 	return gurl.Join(
 		append(item),
