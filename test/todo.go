@@ -138,7 +138,7 @@ func lookup(expect TODO) gurl.Arrow {
 		ƒ.Code(200),
 		ƒ.ServedJSON(),
 		ƒ.Recv(&item),
-		ƒ.Value(&item).Is(expect),
+		ƒ.Value(&item).Is(&expect),
 	)
 }
 
@@ -159,7 +159,13 @@ func TestForEach() gurl.Arrow {
 
 	return gurl.Join(
 		elements(&seq),
-		foreach(&seq),
+		ƒ.FlatMap(func() gurl.Arrow {
+			return foreach(&seq)
+		}),
+		func(x *gurl.IOCat) *gurl.IOCat {
+			x.Body = seq
+			return x
+		},
 	)
 }
 
@@ -176,11 +182,13 @@ func foreach(seq *TODOs) gurl.Arrow {
 		return nil
 	}
 
+	hd := (*seq)[0]
+	tl := (*seq)[1:]
+
 	return gurl.Join(
-		lookup((*seq)[0]),
+		lookup(hd),
 		ƒ.FlatMap(func() gurl.Arrow {
-			tail := (*seq)[1:]
-			return foreach(&tail)
+			return foreach(&tl)
 		}),
 	)
 }
