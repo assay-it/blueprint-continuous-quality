@@ -31,7 +31,7 @@ func TestList() gurl.Arrow {
 	item := TODO{ID: "#1", Title: "study assay.it"}
 
 	return gurl.HTTP(
-		ø.GET("https://%s/todo", host),
+		ø.GET("https://%s/api/todo", host),
 		ƒ.Code(200),
 		ƒ.ServedJSON(),
 		ƒ.Recv(&seq),
@@ -45,7 +45,7 @@ func TestLookup() gurl.Arrow {
 	var item TODO
 
 	return gurl.HTTP(
-		ø.GET("https://%s/todo/%s", host, item.ID),
+		ø.GET("https://%s/api/todo/%s", host, item.ID),
 		ƒ.Code(200),
 		ƒ.ServedJSON(),
 		ƒ.Recv(&item),
@@ -58,7 +58,7 @@ func TestLookup() gurl.Arrow {
 //
 func TestNotFound() gurl.Arrow {
 	return gurl.HTTP(
-		ø.GET("https://%s/todo/%s", host, "unknown"),
+		ø.GET("https://%s/api/todo/%s", host, "unknown"),
 		ƒ.Code(404),
 	)
 }
@@ -66,8 +66,8 @@ func TestNotFound() gurl.Arrow {
 //
 //
 func TestLifeCycle() gurl.Arrow {
-	origin := TODO{ID: "#2", Title: "Write Unit Tests"}
-	remote := TODO{ID: "#2"}
+	origin := TODO{ID: "#4", Title: "have fun!"}
+	remote := TODO{ID: "#4"}
 
 	return gurl.Join(
 		append(origin),
@@ -88,7 +88,7 @@ func contain(item TODO) gurl.Arrow {
 	var seq TODOs
 
 	return gurl.HTTP(
-		ø.GET("https://%s/todo", host),
+		ø.GET("https://%s/api/todo", host),
 		ƒ.Code(200),
 		ƒ.Recv(&seq),
 		ƒ.Seq(&seq).Has(item.ID, item),
@@ -98,7 +98,7 @@ func contain(item TODO) gurl.Arrow {
 //
 func append(item TODO) gurl.Arrow {
 	return gurl.HTTP(
-		ø.POST("https://%s/todo", host),
+		ø.POST("https://%s/api/todo", host),
 		ø.ContentJSON(),
 		ø.Send(item),
 		ƒ.Code(200),
@@ -108,7 +108,7 @@ func append(item TODO) gurl.Arrow {
 //
 func lookup(item *TODO) gurl.Arrow {
 	return gurl.HTTP(
-		ø.GET("https://%s/todo/%s", host, item.ID),
+		ø.GET("https://%s/api/todo/%s", host, item.ID),
 		ƒ.Code(200),
 		ƒ.ServedJSON(),
 		ƒ.Recv(item),
@@ -118,7 +118,7 @@ func lookup(item *TODO) gurl.Arrow {
 //
 func remove(item TODO) gurl.Arrow {
 	return gurl.HTTP(
-		ø.GET("https://%s/todo/%s", host, item.ID),
+		ø.GET("https://%s/api/todo/%s", host, item.ID),
 		ƒ.Code(200),
 	)
 }
