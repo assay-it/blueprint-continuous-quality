@@ -7,7 +7,9 @@ import (
 	ø "github.com/fogfish/gurl/http/send"
 )
 
-var host = tk.Env("HOST", "")
+//
+//
+//
 
 type TODO struct {
 	ID    string `json:"id"`
@@ -24,6 +26,16 @@ func (seq TODOs) Value(i int) interface{} { return seq[i] }
 
 //
 //
+//
+
+var host = tk.Env("HOST", "")
+
+//
+// Elementary Tests - ...
+//
+
+//
+//
 func TestList() gurl.Arrow {
 	var seq TODOs
 	item := TODO{ID: "1", Title: "study assay.it"}
@@ -33,7 +45,7 @@ func TestList() gurl.Arrow {
 		ƒ.Code(200),
 		ƒ.ServedJSON(),
 		ƒ.Recv(&seq),
-		ƒ.Seq(&seq).Has(item.ID, item),
+		ƒ.Seq(&seq).Has(item.ID, &item),
 	)
 }
 
@@ -54,12 +66,33 @@ func TestLookup() gurl.Arrow {
 
 //
 //
+func TestUpdate() gurl.Arrow {
+	item := TODO{ID: "3", Title: "write test suites for your app"}
+	recv := TODO{}
+
+	return gurl.HTTP(
+		ø.PUT("https://%s/api/todo/%s", host, item.ID),
+		ø.ContentJSON(),
+		ø.Send(item),
+		ƒ.Code(200),
+		ƒ.ServedJSON(),
+		ƒ.Recv(&recv),
+		ƒ.Value(&recv).Is(&item),
+	)
+}
+
+//
+//
 func TestNotFound() gurl.Arrow {
 	return gurl.HTTP(
 		ø.GET("https://%s/api/todo/%s", host, "unknown"),
 		ƒ.Code(404),
 	)
 }
+
+//
+// Elementary Chain - ...
+//
 
 //
 //
@@ -114,6 +147,41 @@ func remove(item TODO) gurl.Arrow {
 	return gurl.HTTP(
 		ø.GET("https://%s/api/todo/%s", host, item.ID),
 		ƒ.Code(200),
+	)
+}
+
+//
+// Advance Chain - ...
+//
+
+func TestForEach() gurl.Arrow {
+	var seq TODOs
+
+	return gurl.Join(
+		elements(&seq),
+		foreach(&seq),
+	)
+}
+
+func elements(seq *TODOs) gurl.Arrow {
+	return gurl.HTTP(
+		ø.GET("https://%s/api/todo", host),
+		ƒ.Code(200),
+		ƒ.Recv(seq),
+	)
+}
+
+func foreach(seq *TODOs) gurl.Arrow {
+	if len(*seq) == 0 {
+		return nil
+	}
+
+	return gurl.Join(
+		lookup((*seq)[0]),
+		ƒ.FlatMap(func() gurl.Arrow {
+			tail := (*seq)[1:]
+			return foreach(&tail)
+		}),
 	)
 }
 
