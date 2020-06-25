@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/assay-it/tk"
 	"github.com/fogfish/gurl"
 	ƒ "github.com/fogfish/gurl/http/recv"
@@ -45,7 +43,7 @@ func TestLookup() gurl.Arrow {
 	var item TODO
 
 	return gurl.HTTP(
-		ø.GET("https://%s/api/todo/%s", host, item.ID),
+		ø.GET("https://%s/api/todo/%s", host, "#1"),
 		ƒ.Code(200),
 		ƒ.ServedJSON(),
 		ƒ.Recv(&item),
@@ -66,20 +64,13 @@ func TestNotFound() gurl.Arrow {
 //
 //
 func TestLifeCycle() gurl.Arrow {
-	origin := TODO{ID: "#4", Title: "have fun!"}
-	remote := TODO{ID: "#4"}
+	item := TODO{ID: "#4", Title: "have fun!"}
 
 	return gurl.Join(
-		append(origin),
-		lookup(&remote),
-		ƒ.FMap(func() error {
-			if origin.Title != remote.Title {
-				return fmt.Errorf("origin item %v do not match remote %v", origin, remote)
-			}
-			return nil
-		}),
-		contain(origin),
-		remove(remote),
+		append(item),
+		lookup(item),
+		contain(item),
+		remove(item),
 	)
 }
 
@@ -106,12 +97,15 @@ func append(item TODO) gurl.Arrow {
 }
 
 //
-func lookup(item *TODO) gurl.Arrow {
+func lookup(expect TODO) gurl.Arrow {
+	var item TODO
+
 	return gurl.HTTP(
-		ø.GET("https://%s/api/todo/%s", host, item.ID),
+		ø.GET("https://%s/api/todo/%s", host, expect.ID),
 		ƒ.Code(200),
 		ƒ.ServedJSON(),
-		ƒ.Recv(item),
+		ƒ.Recv(&item),
+		ƒ.Value(&item).Is(expect),
 	)
 }
 
