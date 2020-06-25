@@ -45,7 +45,7 @@ func TestList() gurl.Arrow {
 		ƒ.Code(200),
 		ƒ.ServedJSON(),
 		ƒ.Recv(&seq),
-		ƒ.Seq(&seq).Has(item.ID, &item),
+		ƒ.Seq(&seq).Has(item.ID, item),
 	)
 }
 
@@ -67,7 +67,7 @@ func TestLookup() gurl.Arrow {
 //
 //
 func TestUpdate() gurl.Arrow {
-	item := TODO{ID: "3", Title: "write test suites for your app"}
+	item := TODO{ID: "3", Title: "write test suites"}
 	recv := TODO{}
 
 	return gurl.HTTP(
@@ -145,7 +145,7 @@ func lookup(expect TODO) gurl.Arrow {
 //
 func remove(item TODO) gurl.Arrow {
 	return gurl.HTTP(
-		ø.GET("https://%s/api/todo/%s", host, item.ID),
+		ø.DELETE("https://%s/api/todo/%s", host, item.ID),
 		ƒ.Code(200),
 	)
 }
@@ -183,11 +183,11 @@ func foreach(seq *TODOs) gurl.Arrow {
 	}
 
 	hd := (*seq)[0]
-	tl := (*seq)[1:]
 
 	return gurl.Join(
 		lookup(hd),
 		ƒ.FlatMap(func() gurl.Arrow {
+			tl := (*seq)[1:]
 			return foreach(&tl)
 		}),
 	)
