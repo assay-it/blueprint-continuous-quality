@@ -57,4 +57,43 @@ func TestNewsHTML() gurl.Arrow {
 }
 
 //
+//
+func TestItemJSON() gurl.Arrow {
+	var news News
+
+	return gurl.HTTP(
+		ø.GET("https://%s/api/news/%s", host, "2"),
+		ƒ.Code(200),
+		ƒ.ServedJSON(),
+		ƒ.Recv(&news),
+		ƒ.Value(&news.ID).String("2"),
+		ƒ.Value(&news.Title).String("Sed luctus tortor sit amet eros eleifend cursus."),
+	)
+}
+
+//
+//
+func TestItemHTML() gurl.Arrow {
+	var news []byte
+
+	return gurl.HTTP(
+		ø.GET("https://%s/api/news/%s", host, "2"),
+		ø.Accept().Is("text/html"),
+		ƒ.Code(200),
+		ƒ.Served().Is("text/html"),
+		ƒ.Bytes(&news),
+		ƒ.Value(&news).String("<h1>2: Sed luctus tortor sit amet eros eleifend cursus.</h1>"),
+	)
+}
+
+//
+//
+func TestItemNotFound() gurl.Arrow {
+	return gurl.HTTP(
+		ø.GET("https://%s/api/news/%s", host, "9"),
+		ƒ.Code(404),
+	)
+}
+
+//
 func main() {}
