@@ -82,7 +82,7 @@ func TestItemHTML() gurl.Arrow {
 		ƒ.Code(200),
 		ƒ.Served().Is("text/html"),
 		ƒ.Bytes(&news),
-		ƒ.Value(&news).String("<h1>2: Sed luctus tortor sit amet eros eleifend cursus.</h1>"),
+		ƒ.Value(&news).Bytes([]byte("<h1>2: Sed luctus tortor sit amet eros eleifend cursus.</h1>")),
 	)
 }
 

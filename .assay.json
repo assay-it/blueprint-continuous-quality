@@ -1,5 +1,6 @@
 {
   "suites": [
-    "test/elementary.go"
+    "test/elementary.go",
+    "test/scenario.go"
   ]
 }
