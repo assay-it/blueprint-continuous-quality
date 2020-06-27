@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sort"
 
 	"github.com/assay-it/tk"
@@ -53,7 +52,6 @@ func (s *Scenario) News() gurl.Arrow {
 			sort.Sort(seq)
 			s.Head = seq[0].ID
 			s.Tail = seq[len(seq)-1].ID
-			fmt.Println(s)
 			return nil
 		}),
 	)
