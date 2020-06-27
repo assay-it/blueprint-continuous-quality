@@ -1,3 +1,34 @@
+/*
+
+Microservices have become a design style to evolve systems architecture in parallel,
+implement stable and consistent interfaces. This architecture style brings additional
+complexity and new problems. Once of them is validation of system behavior while its
+components communicate over the network. We need an ability to quantitatively
+evaluate and trade-off the architecture to ensure quality of the software solutions.
+
+https://assay.it is a service that automatically performs a formal (objective)
+proofs of the quality using Behavior as a Code paradigm. It connects cause-and-effect
+(Given/When/Then) to the networking concepts (Input/Process/Output). The expected
+behavior of each network component is declared using simple Golang program (suite).
+
+Here is an example suite that illustrates an ability to apply unit-test like strategy
+on quality assessment. The suite implements a test cases as function of the form:
+
+   func TestXxx() gurl.Arrow
+
+where Xxx is a unique name of test case. The case declares cause-and-effect:
+
+↣ "Given" specifies the communication context and the known state of the expected behavior;
+
+↣ "When" executes key actions about the interaction with remote component;
+
+↣ "Then" observes output of remote component, validates its correctness and outputs results.
+
+The service evaluates suites and its test cases sequentially one after another.
+
+Let's look on the following example!
+
+*/
 package main
 
 import (
