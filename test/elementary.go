@@ -2,21 +2,22 @@
 
 Microservices have become a design style to evolve systems architecture in parallel,
 implement stable and consistent interfaces. This architecture style brings additional
-complexity and new problems. Once of them is validation of system behavior while its
-components communicate over the network. We need an ability to quantitatively
-evaluate and trade-off the architecture to ensure quality of the software solutions.
+complexity and new problems. One of them is the validation of system behavior while its
+components communicate over the network - like integration testing but for distributed
+environment. We need an ability to quantitatively evaluate and trade-off the architecture
+to ensure quality of the solutions.
 
 https://assay.it is a service that automatically performs a formal (objective)
 proofs of the quality using Behavior as a Code paradigm. It connects cause-and-effect
 (Given/When/Then) to the networking concepts (Input/Process/Output). The expected
-behavior of each network component is declared using simple Golang program (suite).
+behavior of each network component is declared using simple Golang program (test suite).
 
 Here is an example suite that illustrates an ability to apply unit-test like strategy
 on quality assessment. The suite implements a test cases as function of the form:
 
-   func TestXxx() gurl.Arrow
+   func TestAbc() gurl.Arrow
 
-where Xxx is a unique name of test case. The case declares cause-and-effect:
+where Abc is a unique name of test case. Each case declares cause-and-effect:
 
 ↣ "Given" specifies the communication context and the known state of the expected behavior;
 
@@ -30,7 +31,7 @@ Let's look on the following example!
 
 */
 
-// each suite is always package main
+// each suite is always declared as main package.
 package main
 
 /*
@@ -61,6 +62,8 @@ import (
 Golang type declaration.
 
 It is possible to declare any types as part of the suite implementation.
+The type declartion can be offloaded to shared library and re-used between
+suites, please see doc.assay.it for details.
 */
 
 // News a type used by the example application. This type models a core data of
@@ -74,8 +77,8 @@ type News struct {
 type List []News
 
 // Value and other functions implements sort.Interface and gurl.Ord interfaces
-// for the sequence. It allows asserting and validation of sequences
-// (e.g. ƒ.Seq(&seq).Has(...) )
+// for List data type. The implementation of these interfaces is mandatory if
+// suite asserts and validates content of the sequence with ƒ.Seq.
 func (seq List) Value(i int) interface{} { return seq[i] }
 func (seq List) Len() int                { return len(seq) }
 func (seq List) Swap(i, j int)           { seq[i], seq[j] = seq[j], seq[i] }
@@ -89,9 +92,9 @@ Suite constants and other global variables
 */
 
 // Settings of assay.it allows developers to customize suite via environment
-// variables. These variables are provided into your code during the assessment.
-// This example application requires a HOST setting that declares a target SUT.
-// Here the toolkit is used to read the value of environment variable.
+// variables. These variables are injected at runtime. Here, the example
+// application requires a HOST variable, which declares domain name of SUT.
+// The assay toolkit api is used to fetch this variable form environment.
 var host = tk.Env("HOST", "")
 
 /*
@@ -123,10 +126,10 @@ func TestNewsJSON() gurl.Arrow {
 	// gurl.HTTP builds higher-order HTTP closure, so called gurl.Arrow, from
 	// primitive elements.
 	return gurl.HTTP(
-		// module ø (gurl/http/send) defines function to specify request of HTTP protocol.
-		// See the doc.assay.it for details about other function of module ø.
+		// module ø (gurl/http/send) defines function to declare HTTP request.
+		// See the doc.assay.it for details about module ø.
 
-		// HTTP method and destination URL
+		// declares HTTP method and destination URL
 		ø.GET("https://%s/api/news", host),
 
 		/*
@@ -134,17 +137,18 @@ func TestNewsJSON() gurl.Arrow {
 		*/
 
 		// module ƒ (gurl/http/recv) defines function to validate correctness of HTTP protocol.
-		// each ƒ constrain might terminate execution of consequent one if its constrain is not
-		// valid. See the doc.assay.it for details about other function of module ƒ.
+		// Each ƒ constrain might terminate execution of consequent ƒ's if it expectation fails.
+		// See the doc.assay.it for details about module ƒ.
 
 		// requires HTTP Status Code to be 200 OK
 		ƒ.Code(200),
 		// requites HTTP Header to be Content-Type: application/json
 		ƒ.ServedJSON(),
 		// requires a remote peer responds with List data type.
-		// ƒ.Recv unmarshal JSON to the variable
+		// ƒ.Recv unmarshal JSON to the variable seq
 		ƒ.Recv(&seq),
 		// requires that expected element is present in the sequence.
+		// Note: all received values are always passed by reference.
 		ƒ.Seq(&seq).Has(expect.ID, expect),
 	)
 }
@@ -155,6 +159,9 @@ TestNewsHTML checks quality of /api/news endpoint. The test case ensures
 that api returns a sequence of news as HTML document
 */
 func TestNewsHTML() gurl.Arrow {
+	// Here the test case do not expect any particular value.
+	// It just declares desired HTTP input and output.
+	// Thus, we have omitted declaration of variables.
 	return gurl.HTTP(
 		ø.GET("https://%s/api/news", host),
 		// output HTTP Header Accept: text/html
@@ -181,9 +188,10 @@ func TestItemJSON() gurl.Arrow {
 		ƒ.Code(200),
 		ƒ.ServedJSON(),
 		// requires a remote peer responds with News data type.
-		// ƒ.Recv unmarshal JSON to the variable
+		// ƒ.Recv unmarshal JSON to the variable news.
 		ƒ.Recv(&news),
 		// ƒ.Value is a helper function to assert received value(s)
+		// Note: all received values are always passed by reference into assert functions
 		ƒ.Value(&news.ID).String("2"),
 		ƒ.Value(&news.Title).String("Sed luctus tortor sit amet eros eleifend cursus."),
 	)
@@ -194,16 +202,20 @@ func TestItemJSON() gurl.Arrow {
 TestItemHTML proofs correctens of example news article endpoint.
 */
 func TestItemHTML() gurl.Arrow {
+	// suite expects octet stream from api, here we declare a placeholder for the data.
 	var news []byte
+	// a constant value of expected response
+	expect := []byte("<h1>2: Sed luctus tortor sit amet eros eleifend cursus.</h1>")
 
 	return gurl.HTTP(
 		ø.GET("https://%s/api/news/%s", host, "2"),
 		ø.Accept().Is("text/html"),
 		ƒ.Code(200),
 		ƒ.Served().Is("text/html"),
-		// ƒ.Bytes consumes response of remote peer into bytes buffer
+		// ƒ.Bytes consumes response of remote peer into byte buffer.
 		ƒ.Bytes(&news),
-		ƒ.Value(&news).Bytes([]byte("<h1>2: Sed luctus tortor sit amet eros eleifend cursus.</h1>")),
+		// ƒ.Value assert received value.
+		ƒ.Value(&news).Bytes(expect),
 	)
 }
 
@@ -218,6 +230,5 @@ func TestItemNotFound() gurl.Arrow {
 	)
 }
 
-// main function is a required element of main package.
-// It have to be declared for each suite.
+// main function is a required for each suite, otherwise we cannot compile your suite.
 func main() {}
