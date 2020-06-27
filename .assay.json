@@ -1,6 +1,7 @@
 {
   "suites": [
     "test/elementary.go",
-    "test/scenario.go"
+    "test/scenario.go",
+    "test/recursive.go"
   ]
 }
