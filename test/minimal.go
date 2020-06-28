@@ -1,7 +1,7 @@
 /*
 
-A minimal example of valid test suite.
-See test/elementary.go for details and explanation of each constrain.
+A minimal suite example.
+See test/elementary.go for details and explanation of each statement in this program.
 
 */
 package main

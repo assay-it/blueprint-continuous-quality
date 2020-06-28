@@ -15,7 +15,7 @@ behavior of each network component is declared using simple Golang program (test
 Here is an example suite that illustrates an ability to apply unit-test like strategy
 on quality assessment. The suite implements a test cases as function of the form:
 
-   func TestAbc() gurl.Arrow
+  func TestAbc() gurl.Arrow
 
 where Abc is a unique name of test case. Each case declares cause-and-effect:
 
