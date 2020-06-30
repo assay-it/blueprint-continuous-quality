@@ -15,6 +15,6 @@
     "typescript": "^3.9.5"
   },
   "scripts": {
-    "synth": "cdk synth"
+    "synth": "npx cdk synth"
   }
 }
