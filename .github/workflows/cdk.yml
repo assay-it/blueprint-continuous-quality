@@ -9,9 +9,5 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: cdk synth
-        uses: youyo/aws-cdk-github-actions@v1
-        with:
-          cdk_subcommand: 'synth'
-          cdk_version: '1.47.0'
-          working_dir: './cloud'
+      - name: install
+        run: npm -C cloud install 
