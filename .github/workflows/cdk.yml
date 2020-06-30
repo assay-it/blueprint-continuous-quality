@@ -5,13 +5,25 @@ jobs:
   aws_cdk:
     runs-on: ubuntu-latest
     steps:
+      ##
+      ##
+      - name: fix GOPATH
+        run: |
+          echo "##[set-env name=GOPATH;]$GITHUB_WORKSPACE"
+          echo "##[add-path]$GITHUB_WORKSPACE/bin"
+        shell: bash
 
+      ##
+      ##
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          path: src/github.com/${{ github.repository }}
 
       - name: install
         run: |
-          npm -C cloud install 
+          npm -C src/github.com/${{ github.repository }}/cloud install 
 
       - name: synth
-        run: npm -C cloud run synth
+        run: |
+          npm -C src/github.com/${{ github.repository }}/cloud run synth
