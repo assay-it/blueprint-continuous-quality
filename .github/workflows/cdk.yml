@@ -11,3 +11,6 @@ jobs:
 
       - name: install
         run: npm -C cloud install 
+
+      - name: synth
+        run: npm -C cloud run synth
