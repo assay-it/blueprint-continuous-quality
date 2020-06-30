@@ -6,6 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - name: checkout
+        uses: actions/checkout@v2
+
       - name: cdk synth
         uses: youyo/aws-cdk-github-actions@v1
         with:
