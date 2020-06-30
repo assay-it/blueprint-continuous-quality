@@ -5,6 +5,13 @@ jobs:
   aws_cdk:
     runs-on: ubuntu-latest
     steps:
+      ## TODO: until docker fix
+      - name: golang
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.14
+      id: go
+
       ##
       ##
       - name: fix GOPATH
@@ -19,6 +26,13 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: src/github.com/${{ github.repository }}
+
+      ##
+      ## TODO: until docker fix
+      - name: go get deps
+        run: |
+          go get -v -t -d github.com/${{ github.repository }}/...
+          
 
       - name: install
         run: |
