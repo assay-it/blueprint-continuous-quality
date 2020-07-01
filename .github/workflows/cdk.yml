@@ -36,8 +36,8 @@ jobs:
           npm -C src/github.com/${{ github.repository }}/cloud install 
 
       - name: tsc
-          run: |
-            npm -C src/github.com/${{ github.repository }}/cloud run tsc
+        run: |
+          npm -C src/github.com/${{ github.repository }}/cloud run tsc
   
       - name: synth
         run: |
