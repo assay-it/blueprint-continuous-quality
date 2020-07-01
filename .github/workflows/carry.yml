@@ -1,13 +1,13 @@
 name: carry
 on:
   issue_comment:
-    types: [created, edited]
+    types: [created]
 
 jobs:
   aws_cdk_xx:
     runs-on: ubuntu-latest
     # if: github.event.author == 'facebadge'
-    if: github.event.comment.body == 'ok'
+    # if: github.event.comment.body == 'ok'
     steps:
 
       - name: test
