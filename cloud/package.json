@@ -15,6 +15,7 @@
     "typescript": "^3.9.5"
   },
   "scripts": {
-    "synth": "npx cdk synth"
+    "tsc": "tsc --noEmit",
+    "cdk": "npx cdk"
   }
 }
