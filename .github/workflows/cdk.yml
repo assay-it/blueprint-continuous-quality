@@ -39,10 +39,6 @@ jobs:
         run: |
           npm -C src/github.com/${{ github.repository }}/cloud run tsc
   
-      - name: synth
-        run: |
-          npm -C src/github.com/${{ github.repository }}/cloud run cdk synth > /dev/null
-
       - name: aws access
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -52,6 +48,10 @@ jobs:
 
       - name: deploy
         run: |
-          npm -C src/github.com/${{ github.repository }}/cloud run cdk deploy -c vsn=latest -c domain=${{ secrets.CONFIG_DOMAIN }}
+          npm -C src/github.com/${{ github.repository }}/cloud run cdk diff example -c vsn=latest -c domain=${{ secrets.CONFIG_DOMAIN }}
+  
+      - name: deploy
+        run: |
+          npm -C src/github.com/${{ github.repository }}/cloud run cdk deploy example -c vsn=latest -c domain=${{ secrets.CONFIG_DOMAIN }}
 
         
