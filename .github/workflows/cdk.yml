@@ -41,7 +41,7 @@ jobs:
   
       - name: synth
         run: |
-          npm -C src/github.com/${{ github.repository }}/cloud run synth > /dev/null
+          npm -C src/github.com/${{ github.repository }}/cloud run cdk synth > /dev/null
 
       - name: aws access
         uses: aws-actions/configure-aws-credentials@v1
@@ -52,5 +52,5 @@ jobs:
 
       - name: deploy
         run: |
-          npm -C src/github.com/${{ github.repository }}/cloud run deploy > /dev/null
+          npm -C src/github.com/${{ github.repository }}/cloud run cdk deploy > /dev/null
         
