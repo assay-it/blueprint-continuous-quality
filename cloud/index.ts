@@ -65,7 +65,7 @@ const func = pure.iaac(iam.Role)(Role).flatMap(
 
 const gocc = (): cdk.BundlingOptions => {
   const gopath = process.env.GOPATH || '/go'
-  const fnpath = path.join(__dirname, '../src').split(gopath).join('')
+  const fnpath = path.join(__dirname, '..').split(gopath).join('')
 
   return {
     image: cdk.BundlingDockerImage.fromAsset(`${gopath}${fnpath}`),
