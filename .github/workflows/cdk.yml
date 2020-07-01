@@ -4,6 +4,7 @@ on: [pull_request]
 jobs:
   aws_cdk:
     runs-on: ubuntu-latest
+    if:  github.actor == 'facebadge'
     steps:
       - name: golang
         uses: actions/setup-go@v2
