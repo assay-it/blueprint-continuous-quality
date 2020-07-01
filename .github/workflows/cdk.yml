@@ -23,10 +23,6 @@ jobs:
         with:
           path: src/github.com/${{ github.repository }}
 
-      # - name: go get tools
-      #   run: |
-      #     go get github.com/assay-it/assay
-
       - name: go get deps
         run: |
           go get -v -t -d github.com/${{ github.repository }}/...
@@ -48,11 +44,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: eu-west-1
   
-      - name: deploy
+      # - name: deploy
+      #   run: |
+      #     npm -C src/github.com/${{ github.repository }}/cloud \
+      #       run -- cdk deploy example-pr${{ github.event.number }} \
+      #       -c vsn=pr${{ github.event.number }} \
+      #       -c domain=${{ secrets.CONFIG_DOMAIN }}
+
+      - name: assay
         run: |
-          npm -C src/github.com/${{ github.repository }}/cloud \
-            run -- cdk deploy example-pr${{ github.event.number }} \
-            -c vsn=pr${{ github.event.number }} \
-            -c domain=${{ secrets.CONFIG_DOMAIN }}
+          go get github.com/assay-it/assay
+          assay \
+            -api latest.assay.it \
+            -secret ${{ secrets.ASSAY_SECRET_KEY }} \
+            -source ${{ github.repository }} \
+            -branch ${{ github.ref }} \
+            -commit ${{ github.sha }} \
+            -number ${{ github.event.number }} \
+            -title ${{ github.event.pull_request.title }}
 
         
