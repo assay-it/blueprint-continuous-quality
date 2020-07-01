@@ -61,6 +61,6 @@ jobs:
             -branch ${{ github.ref }} \
             -commit ${{ github.sha }} \
             -number ${{ github.event.number }} \
-            -title "${{ github.event.pull_request.title }}""
+            -title "${{ github.event.pull_request.title }}"
 
         
