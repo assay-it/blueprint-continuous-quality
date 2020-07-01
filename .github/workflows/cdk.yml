@@ -45,10 +45,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: eu-west-1
-
-      - name: deploy
-        run: |
-          npm -C src/github.com/${{ github.repository }}/cloud run cdk diff example -c vsn=latest -c domain=${{ secrets.CONFIG_DOMAIN }}
   
       - name: deploy
         run: |
