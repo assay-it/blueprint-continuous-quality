@@ -4,10 +4,10 @@ on:
     types: [created, edited]
 
 jobs:
-  aws_cdk:
+  aws_cdk_xx:
     runs-on: ubuntu-latest
-    if: github.event.author == 'facebadge'
-    if: github.event.comment.body == ':+1'
+    # if: github.event.author == 'facebadge'
+    if: github.event.comment.body == 'ok'
     steps:
 
       - name: test
