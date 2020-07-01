@@ -48,6 +48,6 @@ jobs:
   
       - name: deploy
         run: |
-          npm -C src/github.com/${{ github.repository }}/cloud run -- cdk deploy example -c vsn=latest -c domain=${{ secrets.CONFIG_DOMAIN }}
+          npm -C src/github.com/${{ github.repository }}/cloud run -- cdk deploy example-${{ github.event.number }} -c vsn=${{ github.event.number }} -c domain=${{ secrets.CONFIG_DOMAIN }}
 
         

@@ -38,7 +38,7 @@ const tlsCertificate = pure.join(common,
 // Common Stack
 //
 // ----------------------------------------------------------------------------
-const stack = new cdk.Stack(app, 'example', { ...config })
+const stack = new cdk.Stack(app, `example-${vsn}`, { ...config })
 
 //
 //
