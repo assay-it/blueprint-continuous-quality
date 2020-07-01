@@ -23,26 +23,26 @@ jobs:
         with:
           path: src/github.com/${{ github.repository }}
 
-      - name: go get deps
-        run: |
-          go get -v -t -d github.com/${{ github.repository }}/...
+      # - name: go get deps
+      #   run: |
+      #     go get -v -t -d github.com/${{ github.repository }}/...
           
-      - name: install
-        run: |
-          npm -C src/github.com/${{ github.repository }}/cloud \
-            install 
+      # - name: install
+      #   run: |
+      #     npm -C src/github.com/${{ github.repository }}/cloud \
+      #       install 
 
-      - name: tsc
-        run: |
-          npm -C src/github.com/${{ github.repository }}/cloud \
-            run tsc
+      # - name: tsc
+      #   run: |
+      #     npm -C src/github.com/${{ github.repository }}/cloud \
+      #       run tsc
   
-      - name: aws access
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: eu-west-1
+      # - name: aws access
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+      #     aws-region: eu-west-1
   
       # - name: deploy
       #   run: |
@@ -61,6 +61,6 @@ jobs:
             -branch ${{ github.ref }} \
             -commit ${{ github.sha }} \
             -number ${{ github.event.number }} \
-            -title ${{ github.event.pull_request.title }}
+            -title "${{ github.event.pull_request.title }}""
 
         
