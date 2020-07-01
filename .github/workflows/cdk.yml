@@ -33,7 +33,6 @@ jobs:
           
       - name: install
         run: |
-          npm install -g npx
           npm -C src/github.com/${{ github.repository }}/cloud install 
 
       - name: tsc
