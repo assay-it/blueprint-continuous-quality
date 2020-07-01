@@ -58,8 +58,8 @@ jobs:
             -api latest.assay.it \
             -secret ${{ secrets.ASSAY_SECRET_KEY }} \
             -source ${{ github.repository }} \
-            -branch ${{ github.head_ref }} \
-            -commit ${{ github.sha }} \
+            -branch ${{ github.event.pull_request.head.ref }} \
+            -commit ${{ github.event.pull_request.head.sha }} \
             -number ${{ github.event.number }} \
             -title "${{ github.event.pull_request.title }}"
 
