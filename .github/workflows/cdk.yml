@@ -33,11 +33,13 @@ jobs:
           
       - name: install
         run: |
-          npm -C src/github.com/${{ github.repository }}/cloud install 
+          npm -C src/github.com/${{ github.repository }}/cloud \
+            install 
 
       - name: tsc
         run: |
-          npm -C src/github.com/${{ github.repository }}/cloud run tsc
+          npm -C src/github.com/${{ github.repository }}/cloud \
+            run tsc
   
       - name: aws access
         uses: aws-actions/configure-aws-credentials@v1
@@ -48,6 +50,9 @@ jobs:
   
       - name: deploy
         run: |
-          npm -C src/github.com/${{ github.repository }}/cloud run -- cdk deploy example-${{ github.event.number }} -c vsn=${{ github.event.number }} -c domain=${{ secrets.CONFIG_DOMAIN }}
+          npm -C src/github.com/${{ github.repository }}/cloud \
+            run -- cdk deploy example-pr${{ github.event.number }} \
+            -c vsn=pr${{ github.event.number }} \
+            -c domain=${{ secrets.CONFIG_DOMAIN }}
 
         
