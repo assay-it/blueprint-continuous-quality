@@ -52,14 +52,19 @@ jobs:
             -c domain=${{ secrets.CONFIG_DOMAIN }}
 
       - name: assay
-        run: |
-          go get github.com/assay-it/assay
-          assay \
-            -api latest.assay.it \
-            -secret ${{ secrets.ASSAY_SECRET_KEY }} \
-            -head ${{ github.event.pull_request.head.repo.full_name }}/${{ github.event.pull_request.head.ref }}/${{ github.event.pull_request.head.sha }} \
-            -base ${{ github.event.pull_request.base.repo.full_name }}/${{ github.event.pull_request.base.ref }}/${{ github.event.pull_request.base.sha }} \
-            -number ${{ github.event.number }} \
-            -title "${{ github.event.pull_request.title }}"
+        uses: assay-it/github-actions-webhook@v1
+        with:
+          secret: ${{ secrets.ASSAY_SECRET_KEY }}
+
+      # - name: assay
+      #   run: |
+      #     go get github.com/assay-it/assay
+      #     assay \
+      #       -api latest.assay.it \
+      #       -secret ${{ secrets.ASSAY_SECRET_KEY }} \
+      #       -head ${{ github.event.pull_request.head.repo.full_name }}/${{ github.event.pull_request.head.ref }}/${{ github.event.pull_request.head.sha }} \
+      #       -base ${{ github.event.pull_request.base.repo.full_name }}/${{ github.event.pull_request.base.ref }}/${{ github.event.pull_request.base.sha }} \
+      #       -number ${{ github.event.number }} \
+      #       -title "${{ github.event.pull_request.title }}"
 
         
