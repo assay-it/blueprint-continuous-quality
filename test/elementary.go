@@ -132,7 +132,7 @@ func TestNewsJSON() gurl.Arrow {
 		// See the doc.assay.it for details about module ø.
 
 		// declares HTTP method and destination URL
-		ø.GET("https://%s/api/news", host),
+		ø.GET("https://%s/news", host),
 
 		/*
 			"Then" observes output of remote component, validates its correctness and outputs results.
@@ -165,7 +165,7 @@ func TestNewsHTML() gurl.Arrow {
 	// It just declares desired HTTP input and output.
 	// Thus, we have omitted declaration of variables.
 	return gurl.HTTP(
-		ø.GET("https://%s/api/news", host),
+		ø.GET("https://%s/news", host),
 		// output HTTP Header Accept: text/html
 		ø.Accept().Is("text/html"),
 
@@ -185,7 +185,7 @@ func TestItemJSON() gurl.Arrow {
 	var news News
 
 	return gurl.HTTP(
-		ø.GET("https://%s/api/news/%s", host, "2"),
+		ø.GET("https://%s/news/%s", host, "2"),
 
 		ƒ.Code(200),
 		ƒ.ServedJSON(),
@@ -210,7 +210,7 @@ func TestItemHTML() gurl.Arrow {
 	expect := []byte("<h1>2: Sed luctus tortor sit amet eros eleifend cursus.</h1>")
 
 	return gurl.HTTP(
-		ø.GET("https://%s/api/news/%s", host, "2"),
+		ø.GET("https://%s/news/%s", host, "2"),
 		ø.Accept().Is("text/html"),
 		ƒ.Code(200),
 		ƒ.Served().Is("text/html"),
@@ -227,7 +227,7 @@ TestItemNotFound proofs correctens of example news article endpoint.
 */
 func TestItemNotFound() gurl.Arrow {
 	return gurl.HTTP(
-		ø.GET("https://%s/api/news/%s", host, "9"),
+		ø.GET("https://%s/news/%s", host, "9"),
 		ƒ.Code(404),
 	)
 }

@@ -21,7 +21,7 @@ var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("HOST", ""))
 // TestNews endpoint
 func TestNews() gurl.Arrow {
 	return gurl.HTTP(
-		ø.GET("https://%s/api/news", host),
+		ø.GET("https://%s/news", host),
 		ƒ.Code(200),
 	)
 }
