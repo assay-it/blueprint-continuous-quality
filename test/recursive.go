@@ -9,6 +9,8 @@ See test/elementary.go for basic explanation about the suite structure.
 package main
 
 import (
+	"fmt"
+
 	"github.com/assay-it/tk"
 	"github.com/fogfish/gurl"
 	ƒ "github.com/fogfish/gurl/http/recv"
@@ -24,7 +26,7 @@ type News struct {
 // List is a sequence of news, a core type of example application.
 type List []News
 
-var host = tk.Env("HOST", "")
+var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("HOST", ""))
 
 /*
 

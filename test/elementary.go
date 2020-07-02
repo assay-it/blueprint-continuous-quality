@@ -44,6 +44,8 @@ Please check doc.assay.it for details.
 import (
 	//
 	// the toolkit for test suites development that provides various helper api.
+	"fmt"
+
 	"github.com/assay-it/tk"
 
 	//
@@ -95,7 +97,7 @@ Suite constants and other global variables
 // variables. These variables are injected at runtime. Here, the example
 // application requires a HOST variable, which declares domain name of SUT.
 // The assay toolkit api is used to fetch this variable form environment.
-var host = tk.Env("HOST", "")
+var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("HOST", ""))
 
 /*
 

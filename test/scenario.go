@@ -10,6 +10,7 @@ See test/elementary.go for basic explanation about the suite structure.
 package main
 
 import (
+	"fmt"
 	"sort"
 
 	"github.com/assay-it/tk"
@@ -34,7 +35,7 @@ func (seq List) Swap(i, j int)           { seq[i], seq[j] = seq[j], seq[i] }
 func (seq List) Less(i, j int) bool      { return seq[i].ID < seq[j].ID }
 func (seq List) String(i int) string     { return seq[i].ID }
 
-var host = tk.Env("HOST", "")
+var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("HOST", ""))
 
 /*
 
