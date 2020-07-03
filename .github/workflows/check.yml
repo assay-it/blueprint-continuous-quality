@@ -54,6 +54,3 @@ jobs:
       - uses: assay-it/github-actions-webhook@v1
         with:
           secret: ${{ secrets.ASSAY_SECRET_KEY }}
-
-
-        

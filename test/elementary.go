@@ -2,15 +2,15 @@
 
 Microservices have become a design style to evolve systems architecture in parallel,
 implement stable and consistent interfaces. This architecture style brings additional
-complexity and new problems. One of them is the validation of system behavior while its
+complexity and new problems. One of them is the assessment of system behavior while its
 components communicate over the network - like integration testing but for distributed
-environment. We need an ability to quantitatively evaluate and trade-off the architecture
+environment. We need an ability to quantitatively evaluate and trade-off architecture
 to ensure quality of the solutions.
 
-https://assay.it is a service that automatically performs a formal (objective)
-proofs of the quality using Behavior as a Code paradigm. It connects cause-and-effect
-(Given/When/Then) to the networking concepts (Input/Process/Output). The expected
-behavior of each network component is declared using simple Golang program (test suite).
+https://assay.it is designed to performs a formal (objective) proofs of the quality
+using Behavior as a Code paradigm. It connects cause-and-effect (Given/When/Then) to
+the networking concepts (Input/Process/Output). The expected behavior of each network
+component is declared using simple Golang program (test suite).
 
 Here is an example suite that illustrates an ability to apply unit-test like strategy
 on quality assessment. The suite implements a test cases as function of the form:
