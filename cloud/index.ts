@@ -52,7 +52,7 @@ const Role = (): iam.RoleProps => ({
 const func = pure.iaac(iam.Role)(Role).flatMap(
   role => {
     const Lambda = (): lambda.FunctionProps => ({
-      code: new lambda.AssetCode('', { bundling: gocc() }),
+      code: hoc.common.AssetCodeGo(path.join(__dirname, '..')),
       handler: 'main',
       runtime: lambda.Runtime.GO_1_X,
       logRetention: logs.RetentionDays.FIVE_DAYS,
@@ -62,24 +62,6 @@ const func = pure.iaac(iam.Role)(Role).flatMap(
     return (pure.iaac(lambda.Function)(Lambda))
   }
 )
-
-const gocc = (): cdk.BundlingOptions => {
-  const gopath = process.env.GOPATH || '/go'
-  const fnpath = path.join(__dirname, '..').split(gopath).join('')
-
-  return {
-    image: cdk.BundlingDockerImage.fromAsset(`${gopath}${fnpath}`),
-    command: ["go", "build", "-o", `${cdk.AssetStaging.BUNDLING_OUTPUT_DIR}/main`],
-    user: 'root',
-    volumes: [
-      {
-        containerPath: '/go/src',
-        hostPath: `${gopath}/src`,
-      },
-    ],
-    workingDirectory: `/go${fnpath}`,
-  }
-}
 
 //
 //

@@ -16,13 +16,13 @@ import (
 	ø "github.com/fogfish/gurl/http/send"
 )
 
-var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("HOST", ""))
+var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("CONFIG_DOMAIN", ""))
 
 // TestNews endpoint
 func TestNews() gurl.Arrow {
 	return gurl.HTTP(
 		ø.GET("https://%s/news", host),
-		ƒ.Code(200),
+		ƒ.Code(gurl.StatusCodeOK),
 	)
 }
 

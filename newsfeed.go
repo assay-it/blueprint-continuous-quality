@@ -11,21 +11,22 @@ import (
 )
 
 //
-// TODO is a type of elements our application deals with
+// News is an example data type returned by the news feed api
 type News struct {
 	ID    string `json:"id"`
 	Title string `json:"title"`
 }
 
 //
-// tToDo implements REST API to managed the list of TODO items
+// tNews implements REST API to managed the list of News items
 type tNews struct {
 	list map[string]string
 }
 
 //
-// lambda factory
+// main is an entry point function for lambda
 func main() {
+	// Our news feed application is very simple, it just defines fixutes of static news.
 	api := tNews{list: map[string]string{
 		"1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 		"2": "Sed luctus tortor sit amet eros eleifend cursus.",
@@ -34,8 +35,14 @@ func main() {
 		"5": "Nulla quis neque pulvinar, mollis libero in, varius libero.",
 	}}
 
+	// The lambda function is called by AWS API Gateway.
+	// It uses a gouldian library as a thin layer of purely functional request routing on top
+	// of AWS Gateway API. It resolves a challenge of building simple and declarative api
+	// implementations in the absence of pattern matching.
 	lambda.Start(
 		µ.Serve(
+			// The example application provides a simple api, which servers
+			// both JSON and HTML content types. The api either return list of news of individual item
 			api.NewsHTML(),
 			api.NewsJSON(),
 			api.ItemHTML(),
@@ -48,6 +55,7 @@ func main() {
 // NewsHTML endpoint
 //
 // GET /news
+//  - return news feed encoded into HTML
 func (todo *tNews) NewsHTML() µ.Endpoint {
 	return µ.GET(
 		µ.Path(path.Is("news")),
@@ -70,6 +78,7 @@ func (todo *tNews) NewsHTML() µ.Endpoint {
 // NewsJSON endpoint
 //
 // GET /news
+//  - return news feed as JSON array
 func (todo *tNews) NewsJSON() µ.Endpoint {
 	return µ.GET(
 		µ.Path(path.Is("news")),
@@ -89,6 +98,7 @@ func (todo *tNews) NewsJSON() µ.Endpoint {
 // ItemHTML endpoint
 //
 // GET /news/:id
+//  - return news document encoded as HTML
 func (todo *tNews) ItemHTML() µ.Endpoint {
 	var id string
 
@@ -110,6 +120,7 @@ func (todo *tNews) ItemHTML() µ.Endpoint {
 // ItemJSON endpoint
 //
 // GET /news/:id
+//  - return news document in JSON format
 func (todo *tNews) ItemJSON() µ.Endpoint {
 	var id string
 
