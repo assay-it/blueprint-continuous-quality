@@ -2,15 +2,15 @@
 
 Microservices have become a design style to evolve systems architecture in parallel,
 implement stable and consistent interfaces. This architecture style brings additional
-complexity and new problems. One of them is the validation of system behavior while its
+complexity and new problems. One of them is the assessment of system behavior while its
 components communicate over the network - like integration testing but for distributed
-environment. We need an ability to quantitatively evaluate and trade-off the architecture
+environment. We need an ability to quantitatively evaluate and trade-off architecture
 to ensure quality of the solutions.
 
-https://assay.it is a service that automatically performs a formal (objective)
-proofs of the quality using Behavior as a Code paradigm. It connects cause-and-effect
-(Given/When/Then) to the networking concepts (Input/Process/Output). The expected
-behavior of each network component is declared using simple Golang program (test suite).
+https://assay.it is designed to perform a formal (objective) proofs of the quality
+using Behavior as a Code paradigm. It connects cause-and-effect (Given/When/Then) to
+the networking concepts (Input/Process/Output). The expected behavior of each network
+component is declared using simple Golang program (test suite).
 
 Here is an example suite that illustrates an ability to apply unit-test like strategy
 on quality assessment. The suite implements a test cases as function of the form:
@@ -38,10 +38,13 @@ package main
 
 Standard Golang import declaration.
 
-However, assay.it restricts usage of package to the list of allowed one.
-Please check doc.assay.it for details.
+However, assay.it restricts usage of some package.
+Please check doc.assay.it for details of allowed packages.
+We are constantly looking for your feedback, please open an issue to us.
 */
 import (
+	"fmt"
+
 	//
 	// the toolkit for test suites development that provides various helper api.
 	"github.com/assay-it/tk"
@@ -92,10 +95,12 @@ Suite constants and other global variables
 */
 
 // Settings of assay.it allows developers to customize suite via environment
-// variables. These variables are injected at runtime. Here, the example
-// application requires a HOST variable, which declares domain name of SUT.
-// The assay toolkit api is used to fetch this variable form environment.
-var host = tk.Env("HOST", "")
+// variables (See settings of repository). These variables are injected at runtime.
+// Here, the example application requires a CONFIG_DOMAIN variable, which declares
+// domain name of SUT. The assay toolkit api is used to fetch this variable form environment.
+// The subdomain name is deducted from auto variable BUILD_ID. It corresponds to Pull
+// Request Number for any assessment originated by WebHook.
+var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("CONFIG_DOMAIN", ""))
 
 /*
 
@@ -120,28 +125,28 @@ func TestNewsJSON() gurl.Arrow {
 
 		gurl library defines a rich techniques to hide the networking complexity using
 		higher-order-functions and its compositions. See the doc.assay.it for details
-		about api.
+		about api or gurl documentation at github.com
 	*/
 
 	// gurl.HTTP builds higher-order HTTP closure, so called gurl.Arrow, from
 	// primitive elements.
 	return gurl.HTTP(
 		// module ø (gurl/http/send) defines function to declare HTTP request.
-		// See the doc.assay.it for details about module ø.
+		// See the doc.assay.it for details about module ø or gurl documentation at github.com
 
 		// declares HTTP method and destination URL
-		ø.GET("https://%s/api/news", host),
+		ø.GET("https://%s/news", host),
 
 		/*
 			"Then" observes output of remote component, validates its correctness and outputs results.
 		*/
 
-		// module ƒ (gurl/http/recv) defines function to validate correctness of HTTP protocol.
+		// module ƒ (gurl/http/recv) defines function to validate correctness of HTTP response.
 		// Each ƒ constrain might terminate execution of consequent ƒ's if it expectation fails.
-		// See the doc.assay.it for details about module ƒ.
+		// See the doc.assay.it for details about module ƒ or gurl documentation at github.com
 
 		// requires HTTP Status Code to be 200 OK
-		ƒ.Code(200),
+		ƒ.Code(gurl.StatusCodeOK),
 		// requites HTTP Header to be Content-Type: application/json
 		ƒ.ServedJSON(),
 		// requires a remote peer responds with List data type.
@@ -163,12 +168,12 @@ func TestNewsHTML() gurl.Arrow {
 	// It just declares desired HTTP input and output.
 	// Thus, we have omitted declaration of variables.
 	return gurl.HTTP(
-		ø.GET("https://%s/api/news", host),
+		ø.GET("https://%s/news", host),
 		// output HTTP Header Accept: text/html
 		ø.Accept().Is("text/html"),
 
 		// requires HTTP Status Code to be 200 OK
-		ƒ.Code(200),
+		ƒ.Code(gurl.StatusCodeOK),
 		// requites HTTP Header to be Content-Type: text/html
 		ƒ.Served().Is("text/html"),
 	)
@@ -183,9 +188,9 @@ func TestItemJSON() gurl.Arrow {
 	var news News
 
 	return gurl.HTTP(
-		ø.GET("https://%s/api/news/%s", host, "2"),
+		ø.GET("https://%s/news/%s", host, "2"),
 
-		ƒ.Code(200),
+		ƒ.Code(gurl.StatusCodeOK),
 		ƒ.ServedJSON(),
 		// requires a remote peer responds with News data type.
 		// ƒ.Recv unmarshal JSON to the variable news.
@@ -208,9 +213,9 @@ func TestItemHTML() gurl.Arrow {
 	expect := []byte("<h1>2: Sed luctus tortor sit amet eros eleifend cursus.</h1>")
 
 	return gurl.HTTP(
-		ø.GET("https://%s/api/news/%s", host, "2"),
+		ø.GET("https://%s/news/%s", host, "2"),
 		ø.Accept().Is("text/html"),
-		ƒ.Code(200),
+		ƒ.Code(gurl.StatusCodeOK),
 		ƒ.Served().Is("text/html"),
 		// ƒ.Bytes consumes response of remote peer into byte buffer.
 		ƒ.Bytes(&news),
@@ -225,10 +230,10 @@ TestItemNotFound proofs correctens of example news article endpoint.
 */
 func TestItemNotFound() gurl.Arrow {
 	return gurl.HTTP(
-		ø.GET("https://%s/api/news/%s", host, "9"),
-		ƒ.Code(404),
+		ø.GET("https://%s/news/%s", host, "9"),
+		ƒ.Code(gurl.StatusCodeNotFound),
 	)
 }
 
-// main function is a required for each suite, otherwise we cannot compile your suite.
+// empty main function is a required for each suite, otherwise we cannot compile it.
 func main() {}

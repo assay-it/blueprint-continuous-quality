@@ -9,6 +9,8 @@ See test/elementary.go for basic explanation about the suite structure.
 package main
 
 import (
+	"fmt"
+
 	"github.com/assay-it/tk"
 	"github.com/fogfish/gurl"
 	ƒ "github.com/fogfish/gurl/http/recv"
@@ -24,7 +26,7 @@ type News struct {
 // List is a sequence of news, a core type of example application.
 type List []News
 
-var host = tk.Env("HOST", "")
+var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("CONFIG_DOMAIN", ""))
 
 /*
 
@@ -48,8 +50,8 @@ func TestForEach() gurl.Arrow {
 		//
 		//   for _, id := range seq { ... }
 		//
-		// However, the sequence is defined only when previous operation succeeded.
-		// Therefore, the case build a recursion with foreach function and lifts it into
+		// However, the sequence is materialized only when previous operation succeeded.
+		// Therefore, the case builds a recursion with foreach function and lifts it into
 		// category of HTTP I/O.
 		ƒ.FlatMap(func() gurl.Arrow {
 			return foreach(&seq)
@@ -66,8 +68,8 @@ func TestForEach() gurl.Arrow {
 // into seq variable
 func news(seq *List) gurl.Arrow {
 	return gurl.HTTP(
-		ø.GET("https://%s/api/news", host),
-		ƒ.Code(200),
+		ø.GET("https://%s/news", host),
+		ƒ.Code(gurl.StatusCodeOK),
 		ƒ.Recv(seq),
 	)
 }
@@ -79,7 +81,7 @@ func foreach(seq *List) gurl.Arrow {
 		return nil
 	}
 
-	// each step of iterator is a fetch of the head element from sequence and then
+	// each step of iterator fetches the head element from sequence and then
 	// continue same function for the tail.
 	return gurl.Join(
 		item((*seq)[0]),
@@ -95,8 +97,8 @@ func item(expect News) gurl.Arrow {
 	var item News
 
 	return gurl.HTTP(
-		ø.GET("https://%s/api/news/%s", host, expect.ID),
-		ƒ.Code(200),
+		ø.GET("https://%s/news/%s", host, expect.ID),
+		ƒ.Code(gurl.StatusCodeOK),
 		ƒ.ServedJSON(),
 		ƒ.Recv(&item),
 		ƒ.Value(&item).Is(&expect),

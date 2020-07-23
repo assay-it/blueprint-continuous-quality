@@ -1,0 +1,83 @@
+##
+## A reference implementation of Everything is Continuous workflow.
+## This example only triggers the workflow at Pull Request.  
+name: cloud
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    ## Just to ensure that deployment to AWS account is originated from trusted sources.  
+    if:  github.actor == 'facebadge'
+    steps:
+
+      ##
+      ## Example News Feed application is implemented with Golang. The workflow just
+      ##  * installs Golang
+      ##  * fixes GOPATH to point into GitHub Action Workspace directory
+      ##  * checks out the repository and fetches dependencies
+      - name: golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.14
+        id: go
+
+      - name: fix GOPATH
+        run: |
+          echo "##[set-env name=GOPATH;]$GITHUB_WORKSPACE"
+          echo "##[add-path]$GITHUB_WORKSPACE/bin"
+        shell: bash
+
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          path: src/github.com/${{ github.repository }}
+
+      - name: go get deps
+        run: |
+          go get -v -t -d github.com/${{ github.repository }}/...
+      
+      ##
+      ## Example News Feed application is deployed with AWS CDK (using TypeScript).
+      ## Here we just install all libraries (including TypeScript and AWS CDK) and
+      ## compile the application
+      - name: install
+        run: |
+          npm -C src/github.com/${{ github.repository }}/cloud \
+            install 
+
+      - name: tsc
+        run: |
+          npm -C src/github.com/${{ github.repository }}/cloud \
+            run tsc
+  
+      ##
+      ## The deployment of News Feed application starts here. 
+      ## CI\CD obtains access credentials to your AWS account.
+      - name: aws access
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: eu-west-1
+  
+      ##
+      ## The deployment is orchestrated with AWS CDK. GitHub Actions
+      ## deploys a unique cloud formation stack for each Pull Request.
+      - name: deploy
+        run: |
+          npm -C src/github.com/${{ github.repository }}/cloud \
+            run -- cdk deploy example-v${{ github.event.number }} \
+            -c vsn=v${{ github.event.number }} \
+            -c domain=${{ secrets.CONFIG_DOMAIN }}
+
+      ##
+      ## GitHub Actions is integrated with https://assay.it WebHook API.
+      - uses: assay-it/github-actions-webhook@latest
+        with:
+          secret: ${{ secrets.ASSAY_SECRET_KEY }}

@@ -7,6 +7,8 @@ See test/elementary.go for details and explanation of each statement in this pro
 package main
 
 import (
+	"fmt"
+
 	"github.com/assay-it/tk"
 
 	"github.com/fogfish/gurl"
@@ -14,13 +16,13 @@ import (
 	ø "github.com/fogfish/gurl/http/send"
 )
 
-var host = tk.Env("HOST", "")
+var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("CONFIG_DOMAIN", ""))
 
 // TestNews endpoint
 func TestNews() gurl.Arrow {
 	return gurl.HTTP(
-		ø.GET("https://%s/api/news", host),
-		ƒ.Code(200),
+		ø.GET("https://%s/news", host),
+		ƒ.Code(gurl.StatusCodeOK),
 	)
 }
 
