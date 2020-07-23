@@ -30,7 +30,8 @@ Continuous Deployment. Why we should distinguish them? "Everything is Continuous
 "Everything is Continuous" does not invent any special workflow. It just emphasis deployment
 and quality assessment as a key feature along the development process. Continuous proofs of 
 the quality helps to eliminate defects at earlier phases of feature lifecycle. Eventually,
-each engineering team adopts the workflow suitable for them. This example application implements a reference workflow to emphasis role of https://assay.it. Let's take a look:
+each engineering team adopts the workflow suitable for them. This example application implements a reference workflow to emphasis role of https://assay.it as part of pull request
+quality check. Let's take a look:
  
 1. The `main` branch of your project is always latest deployable snapshot of a software asset. 
 
@@ -44,8 +45,7 @@ each engineering team adopts the workflow suitable for them. This example applic
 
 6. Everything is all right, the pull request is merged to `main` branch. 
 
-You can project same pattern on `main` branch and releases - use Behavior as a Code quality
-assessment for each deployment. 
+You can project same pattern on `main` branch and releases - use Behavior as a Code quality assessment for each deployment.
 
 ## Getting Started
 
@@ -53,7 +53,7 @@ This example application shows https://assay.it in actions and few extra things.
 
 * It implement a naive [News Feed](newsfeed.go) interface.
 
-* The news feed is deployable as serverless application to AWS. The [cloud](cloud) is AWS CDK application that orchestrates deployment.
+* The news feed is deployable as serverless application to AWS. The [cloud](cloud/index.ts) is AWS CDK application that orchestrates deployment.
 
 * GitHub Actions implements [Everything is Continuous workflow](.github/workflows/check.yml).
 
@@ -87,12 +87,15 @@ Are you ready to on-board with this example?
 6. Make any changes and open a pull request against your fork. You might change the `github.actor` condition at the workflow.
 7. Enjoy the results!
 
-TODO: after 3. declare HOST variable (same as CONFIG_DOMAIN)
-TODO: rename HOST to CONFIG_DOMAIN
+The entire process is visualized on the diagram:
+
+![Everything is Continuous](workflow.svg "Everything is Continuous")
+
 
 ## Next Steps
 
 1. Study "Behavior as a Code" syntax defined by the [gurl library](https://github.com/fogfish/gurl).
+
 
 ## Issues
 

@@ -1,8 +1,8 @@
 /*
 
-Here is an example suite that shows an ability to execute a behavioral scenario with
-quality assessment. The suite implement a sequence of dependent interactions with
-remote microservice. Each consequent interaction requires input from previous one.
+Here is an example suite that shows an ability to execute a behavioral scenario.
+The suite implement a sequence of dependent interactions with microservice.
+Each consequent interaction requires input from previous one.
 
 See test/elementary.go for basic explanation about the suite structure.
 
@@ -62,7 +62,7 @@ func (s *Scenario) news() gurl.Arrow {
 
 	return gurl.HTTP(
 		ø.GET("https://%s/news", host),
-		ƒ.Code(200),
+		ƒ.Code(gurl.StatusCodeOK),
 		ƒ.Recv(&seq),
 		// So far, the case has successfully received the sequence of news into seq variable.
 		// We need to write a small function that extracts first and last elements from
@@ -72,8 +72,8 @@ func (s *Scenario) news() gurl.Arrow {
 		//   gurl.HTTP(...)
 		//   s.Head = seq[0].ID
 		//
-		// The sequence is not defined yet at the moment when gurl.HTTP(...) returns. It only
-		// returns a "promise" of HTTP I/O which is materialized later. Therefore, any
+		// The sequence is not "materialized" yet at the moment when gurl.HTTP(...) returns.
+		// It only returns a "promise" of HTTP I/O which is materialized later. Therefore, any
 		// computation have to be lifted-and-composed with this promise. ƒ.FMap does it.
 		// ƒ.FMap takes a closure and applies it to the results of network communication.
 		// In this example, the closure sort received sequence and fetches first and last
@@ -98,7 +98,7 @@ func (s *Scenario) item(id *string) gurl.Arrow {
 
 	return gurl.HTTP(
 		ø.GET("https://%s/news/%s", host, id),
-		ƒ.Code(200),
+		ƒ.Code(gurl.StatusCodeOK),
 		ƒ.ServedJSON(),
 		ƒ.Recv(&news),
 	)

@@ -50,8 +50,8 @@ func TestForEach() gurl.Arrow {
 		//
 		//   for _, id := range seq { ... }
 		//
-		// However, the sequence is defined only when previous operation succeeded.
-		// Therefore, the case build a recursion with foreach function and lifts it into
+		// However, the sequence is materialized only when previous operation succeeded.
+		// Therefore, the case builds a recursion with foreach function and lifts it into
 		// category of HTTP I/O.
 		ƒ.FlatMap(func() gurl.Arrow {
 			return foreach(&seq)
@@ -69,7 +69,7 @@ func TestForEach() gurl.Arrow {
 func news(seq *List) gurl.Arrow {
 	return gurl.HTTP(
 		ø.GET("https://%s/news", host),
-		ƒ.Code(200),
+		ƒ.Code(gurl.StatusCodeOK),
 		ƒ.Recv(seq),
 	)
 }
@@ -81,7 +81,7 @@ func foreach(seq *List) gurl.Arrow {
 		return nil
 	}
 
-	// each step of iterator is a fetch of the head element from sequence and then
+	// each step of iterator fetches the head element from sequence and then
 	// continue same function for the tail.
 	return gurl.Join(
 		item((*seq)[0]),
@@ -98,7 +98,7 @@ func item(expect News) gurl.Arrow {
 
 	return gurl.HTTP(
 		ø.GET("https://%s/news/%s", host, expect.ID),
-		ƒ.Code(200),
+		ƒ.Code(gurl.StatusCodeOK),
 		ƒ.ServedJSON(),
 		ƒ.Recv(&item),
 		ƒ.Value(&item).Is(&expect),
