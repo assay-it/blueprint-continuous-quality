@@ -58,7 +58,7 @@ This example application shows https://assay.it in actions and few extra things.
 * GitHub Actions implements [Everything is Continuous workflow](.github/workflows/check.yml).
 
 * Behavior as a Code at [test](test) folder is the core part of the example. It implements a quality assessment of the news feed interface. These suites are executed by https://assay.it against the sandbox environment.
-- [elementary.go](test/elementary.go] illustrates an ability to apply unit-test like strategy.
+- [elementary.go](test/elementary.go) illustrates an ability to apply unit-test like strategy.
 - [minimal.go](test/minimal.go) a minimal suite example.
 - [scenario.go](test/scenario.go) shows an ability to execute a behavioral scenario, where chain of requests models a typical consumer behavior.
 - [recursive.go](test/recursive.go) demonstrates ability of recursive behavior scenarios.
