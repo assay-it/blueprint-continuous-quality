@@ -1,7 +1,7 @@
 ##
 ## A reference implementation of Everything is Continuous workflow.
-## This example only triggers the workflow at Pull Request.  
-name: cloud
+## see https://doc.assay.it/docs/workflows/everything-is-continuous
+name: checks
 on:
   pull_request:
     types:

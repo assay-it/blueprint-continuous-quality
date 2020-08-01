@@ -1,8 +1,7 @@
 # Advanced Suite Sample
 
-Here is an example application to show https://assay.it in actions. It talks about
-advanced topics such as Behavior as a Code development, integration with CI\CD and
-depict the workflow. Please look into [simple suite sample](https://github.com/assay-it/sample.assay.it).
+Here is an example application to show https://assay.it in actions. It shows a reference
+implementation of [Everything is Continuous](https://doc.assay.it/2020/07/01/Everything-is-Continuous.html) workflow, shows advanced usage of Behavior as a Code paradigm and integration with CI/CD. Please take also a look into [simple suite sample](https://github.com/assay-it/sample.assay.it).
 
 
 ## Inspiration
@@ -19,83 +18,103 @@ Behavior as a Code paradigm. It connects cause-and-effect (Given/When/Then) to t
 concepts (Input/Process/Output). The expected behavior of each network component is declared
 using simple Golang program.
 
-This repository delivers a guidance about the basic features of the service and integration patterns.
+This example is inspired by the blog post [Everything is Continuous](https://doc.assay.it/2020/07/01/Everything-is-Continuous.html) and provides the reference implementation and the guidance about of the eponymous [workflow](https://doc.assay.it/docs/workflows/everything-is-continuous). 
 
 
 ## Everything is Continuous
 
-Modern software engineering is talking about Continuous Integration, Continuous Delivery and
-Continuous Deployment. Why we should distinguish them? "Everything is Continuous" defines a right philosophy and commitment that ensures always ready state of your code. It also implements pipelines to deploy every commit straight to sandbox with following promotion to production. 
+Modern software engineering is talking about Continuous Integration, Continuous Delivery and Continuous Deployment. Why should we distinguish them? **"Everything is Continuous"** defines a right philosophy and commitment that ensures the always ready state of your code. It also implements pipelines to deploy every commit straight to sandbox with the following promotion to production.
 
-"Everything is Continuous" does not invent any special workflow. It just emphasis deployment
-and quality assessment as a key feature along the development process. Continuous proofs of 
-the quality helps to eliminate defects at earlier phases of feature lifecycle. Eventually,
-each engineering team adopts the workflow suitable for them. This example application implements a reference workflow to emphasis role of https://assay.it as part of pull request
-quality check. Let's take a look:
+**"Everything is Continuous"** does not invent any special workflow. It just emphasizes deployment and quality assessment as a key feature along the development process. Continuous proofs of the quality helps to eliminate defects at earlier phases of the feature lifecycle. It impacts on engineering teams philosophy and commitments, ensuring that your microservice(s) are always in a release-ready state. The right implementation of the workflow deploys every commit to disposable sandbox environment with the following promotion to production. This example application implements a reference workflow to emphasis role of [https://assay.it](https://assay.it) as part of pull request
+quality check.
+
+Let's take a look:
  
-1. The `main` branch of your project is always latest deployable snapshot of a software asset. 
+1. The `main` branch of your project is always the latest deployable snapshot of a microservice. CI/CD have to automate the `main` snapshot deployments every time when a new feature is merged. 
 
-2. The feature integration into `main` branch is implemented through pull request.
+2. The feature integration into `main` is implemented through pull request (no exceptions whatsoever).
 
-3. CI\CD (e.g. GitHub Actions) executes automated pull request deployment to sandbox environment every time new changes are proposed (each commit).
+3. GitHub Actions executes automated pull request deployment to the sandbox environment every time new changes are proposed (each commit). The sandbox environment is a disposable deployment dedicated only for pull request validation.
 
 4. Once the sandbox environment is ready, the integration and behavioral testing phase begins.
 
 5. https://assay.it make a formal proofs of the quality using Behavior as a Code paradigm.
 
-6. Everything is all right, the pull request is merged to `main` branch. 
+6. Everything is alright, the pull request is merged to `main` branch. 
 
-You can project same pattern on `main` branch and releases - use Behavior as a Code quality assessment for each deployment.
+Exactly same quality assessment technique is applied to the `main` branch and releases - Behavior as a Code runs the quality assessment for each deployment.
+
+## Key features
+
+We build https://assay.it to help developers with quality assessment of microservices in the distributed environment. The service is designed to perform a formal and objective proof of the quality using Behavior as a Code paradigm every time changes are applied to your environment. This examples:
+
+* show https://assay.it and [Everything is Continuous workflow](https://doc.assay.it//docs/workflows/everything-is-continuous) in actions;
+
+* defines the [GitHub Actions](.github/workflows/check.yml) that checks the quality of proposed changes. It is executed for each pull request and its commits;
+
+* implements a naive [News Feed](newsfeed.go) serverless application;
+
+* use TypeScript and AWS CDK to implement [Infrastructure as a Code](cloud) for the serverless application;
+
+* [Behavior as a Code](test) for the quality assessment of the the serverless application.
+
 
 ## Getting Started
 
-This example application shows https://assay.it in actions and few extra things. You can fork this repo and play with it in own account... Let's have a look on the repository:
+**Sign Up** to https://assay.it, **Fork** this repository and play with this example. Let's have a look on the repository content first.
 
-* It implement a naive [News Feed](newsfeed.go) interface.
+```
+/
+├── .github/workflows
+|   └── check.yml      // GitHub Action, the CI/CD workflow
+|
+├── cloud
+|   ├── index.ts       // Infrastructure as a Code
+|   └── ...
+|
+├── test               // Behavior as a Code
+|   ├── elementary.go  // shows unit-test like quality assessment
+|   ├── minimal.go     // a minimal BaC suite
+|   ├── recursive.go   // demonstrates ability of recursive scenarios
+|   └── scenario.go    // shows behavioral scenario, chain of requests to model consumer 
+|
+├── .assay.json        // the configuration file, lists scenarios to execute
+├── newsfeed.go        // the naive News Feed serverless application
+```
 
-* The news feed is deployable as serverless application to AWS. The [cloud](cloud/index.ts) is AWS CDK application that orchestrates deployment.
+1. Sign Up for https://assay.it with your GitHub account.
 
-* GitHub Actions implements [Everything is Continuous workflow](.github/workflows/check.yml).
-
-* Behavior as a Code at [test](test) folder is the core part of the example. It implements a quality assessment of the news feed interface. These suites are executed by https://assay.it against the sandbox environment.
-- [elementary.go](test/elementary.go) illustrates an ability to apply unit-test like strategy.
-- [minimal.go](test/minimal.go) a minimal suite example.
-- [scenario.go](test/scenario.go) shows an ability to execute a behavioral scenario, where chain of requests models a typical consumer behavior.
-- [recursive.go](test/recursive.go) demonstrates ability of recursive behavior scenarios.
-
-Are you ready to on-board with this example?
-
-### Requirements
-
-**Note**: the following requirements applies to this example only.
-
-1. You need to have an AWS Account, this example deploys a serverless app.
-
-2. You need to have a Hosted Zone configured in the account, this example uses custom domain for api.
-
-### Let's on-board with this example 
-
-1. Sign Up to https://assay.it
 2. Fork the repository to your GitHub account
-3. Go To Account > Setting and Integrate your fork (example.assay.it) with https://assay.it
-4. Go To Account > Setting > Secrets and generate a New secret key. It is required to integrate the service with CI\CD (GitHub Actions in this example).
-5. Define GitHub secrets at your own fork of the repository: example.assay.it > Settings > Secrets.
-  * `AWS_ACCESS_KEY` - the access key to access your AWS account
-  * `AWS_SECRET_KEY` - the secret key to access your AWS account
-  * `CONFIG_DOMAIN` - the domain name to deploy example News Feed API. Your AWS account shall be a owner and contain corresponding AWS Route53 Hosted Zone. 
-  * `ASSAY_SECRET_KEY` - secret key generate at previous step.
-6. Make any changes and open a pull request against your fork. You might change the `github.actor` condition at the workflow.
-7. Enjoy the results!
 
-The entire process is visualized on the diagram:
+3. AWS account is required to reveal the whole essence of this example. You need obtain AWS access and secret keys so that GitHub Actions can deploy the application. These keys (`AWS_ACCESS_KEY`, `AWS_SECRET_KEY`) shall be configured to GitHub secrets at your own fork of the repository: example.assay.it > Settings > Secrets. 
 
-![Everything is Continuous](workflow.svg "Everything is Continuous")
+4. This example deploys an application under well-known name (e.g. `v1.example.com`). Therefore, a AWS Route53 Hosted Zone is required at your AWS account otherwise the example would not work. Please configure the name of the domain, which is owned by the zone, to `CONFIG_DOMAIN` GitHub Secret variable.
 
+5. Integrate the fork of this repository with https://assay.it, Go To: Account > Setting > Integrate
+
+6. Give GitHub Actions permission to invocate WebHook API on your behalf, Go To Account > Setting > Secrets > New Secret Key. Create a new secret `ASSAY_SECRET_KEY` at GitHub Secret with this value.
+
+7. Make any changes and open a pull request against your fork (e.g. change the `github.actor` condition to your own name at the workflow).
+
+8. Enjoy the results!
+
+What is really happens inside? Let's look on the diagram:
+
+![Everything is Continuous](highlevel-design.svg "Everything is Continuous")
+
+GitHub Actions use our Infrastructure as a Code to continuously deploy changes to the sandbox environment. The deployment is immutable, a new version of the application is created for each distinct pull request. The successful deployment triggers WebHook at https://assay.it. The service checks out defined Behavior as a Code from the repository and applies the quality assessment against the sandbox environment. Results of assessment is published back to pull request. 
 
 ## Next Steps
 
-1. Study "Behavior as a Code" syntax defined by the [gurl library](https://github.com/fogfish/gurl).
+1. Study the [core concepts](https://doc.assay.it/docs/core) behind and [coding style](https://doc.assay.it/docs/core/style) of Behavior as a Code paradigm
 
+2. This example implements an advanced Behavior as a Code at [test](test) folder. Use them as an annotated reference
+  * [elementary.go](test/elementary.go) shows unit-test like quality assessment;
+  * [minimal.go](test/minimal.go) a minimal BaC suite, use it as template for your work;
+  * [scenario.go](test/scenario.go) shows an ability to execute a behavioral scenario, where chain of requests models a typical consumer behavior.
+  * [recursive.go](test/recursive.go) demonstrates ability of recursive behavior scenarios.
+
+3. Check our documentations https://doc.assay.it/
 
 ## Issues
 
