@@ -7,35 +7,15 @@ Each consequent interaction requires input from previous one.
 See test/elementary.go for basic explanation about the suite structure.
 
 */
-package main
+package assay
 
 import (
-	"fmt"
 	"sort"
 
-	"github.com/assay-it/tk"
 	"github.com/fogfish/gurl"
 	ƒ "github.com/fogfish/gurl/http/recv"
 	ø "github.com/fogfish/gurl/http/send"
 )
-
-// News a type used by the example application.
-type News struct {
-	ID    string `json:"id"`
-	Title string `json:"title"`
-}
-
-// List is a sequence of news, a core type of example application.
-type List []News
-
-// Value and other functions implements sort.Interface and gurl.Ord interfaces
-func (seq List) Value(i int) interface{} { return seq[i] }
-func (seq List) Len() int                { return len(seq) }
-func (seq List) Swap(i, j int)           { seq[i], seq[j] = seq[j], seq[i] }
-func (seq List) Less(i, j int) bool      { return seq[i].ID < seq[j].ID }
-func (seq List) String(i int) string     { return seq[i].ID }
-
-var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("CONFIG_DOMAIN", ""))
 
 /*
 
@@ -129,5 +109,3 @@ func TestScenario() gurl.Arrow {
 		s.item(&s.Last),
 	)
 }
-
-func main() {}

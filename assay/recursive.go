@@ -6,27 +6,13 @@ The suite implement a sequence of nested interactions with micorservice.
 See test/elementary.go for basic explanation about the suite structure.
 
 */
-package main
+package assay
 
 import (
-	"fmt"
-
-	"github.com/assay-it/tk"
 	"github.com/fogfish/gurl"
 	ƒ "github.com/fogfish/gurl/http/recv"
 	ø "github.com/fogfish/gurl/http/send"
 )
-
-// News a type used by the example application.
-type News struct {
-	ID    string `json:"id"`
-	Title string `json:"title"`
-}
-
-// List is a sequence of news, a core type of example application.
-type List []News
-
-var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("CONFIG_DOMAIN", ""))
 
 /*
 
@@ -104,6 +90,3 @@ func item(expect News) gurl.Arrow {
 		ƒ.Value(&item).Is(&expect),
 	)
 }
-
-//
-func main() {}
