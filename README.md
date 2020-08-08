@@ -1,7 +1,7 @@
 # Advanced Suite Sample
 
 Here is an example application to show https://assay.it in actions. It shows a reference
-implementation of [Everything is Continuous](https://doc.assay.it/2020/07/01/Everything-is-Continuous.html) workflow, shows advanced usage of Behavior as a Code paradigm and integration with CI/CD. Please take also a look into [simple suite sample](https://github.com/assay-it/sample.assay.it).
+implementation of [Everything is Continuous](https://assay.it/case%20study/continuous%20deployment/2020/07/01/everything-is-continuos) workflow, shows advanced usage of Behavior as a Code paradigm and integration with CI/CD. Please take also a look into [simple suite sample](https://github.com/assay-it/sample.assay.it).
 
 
 ## Inspiration
@@ -14,19 +14,18 @@ environment. We need an ability to quantitatively evaluate and trade-off archite
 to ensure quality of the solutions.
 
 https://assay.it is designed to performs a formal (objective) proofs of the quality using
-Behavior as a Code paradigm. It connects cause-and-effect (Given/When/Then) to the networking
+Behavior as a Code contracts. It connects cause-and-effect (Given/When/Then) to the networking
 concepts (Input/Process/Output). The expected behavior of each network component is declared
 using simple Golang program.
 
-This example is inspired by the blog post [Everything is Continuous](https://doc.assay.it/2020/07/01/Everything-is-Continuous.html) and provides the reference implementation and the guidance about of the eponymous [workflow](https://doc.assay.it/docs/workflows/everything-is-continuous). 
+This example is inspired by the blog post [Everything is Continuous](https://assay.it/case%20study/continuous%20deployment/2020/07/01/everything-is-continuos) and provides the reference implementation and the guidance about of the eponymous [workflow](https://assay.it/doc/case-study/everything-is-continuous). 
 
 
 ## Everything is Continuous
 
 Modern software engineering is talking about Continuous Integration, Continuous Delivery and Continuous Deployment. Why should we distinguish them? **"Everything is Continuous"** defines a right philosophy and commitment that ensures the always ready state of your code. It also implements pipelines to deploy every commit straight to sandbox with the following promotion to production.
 
-**"Everything is Continuous"** does not invent any special workflow. It just emphasizes deployment and quality assessment as a key feature along the development process. Continuous proofs of the quality helps to eliminate defects at earlier phases of the feature lifecycle. It impacts on engineering teams philosophy and commitments, ensuring that your microservice(s) are always in a release-ready state. The right implementation of the workflow deploys every commit to disposable sandbox environment with the following promotion to production. This example application implements a reference workflow to emphasis role of [https://assay.it](https://assay.it) as part of pull request
-quality check.
+**"Everything is Continuous"** does not invent any special workflow. It just emphasizes deployment and quality assessment as a key feature along the development process. Continuous proofs of the quality helps to eliminate defects at earlier phases of the feature lifecycle. It impacts on engineering teams philosophy and commitments, ensuring that your microservice(s) are always in a release-ready state. The right implementation of the workflow deploys every commit to disposable sandbox environment with the following promotion to production. This example application implements a reference workflow to emphasis role of [https://assay.it](https://assay.it) as part of pull request quality check.
 
 Let's take a look:
  
@@ -48,7 +47,7 @@ Exactly same quality assessment technique is applied to the `main` branch and re
 
 We build https://assay.it to help developers with quality assessment of microservices in the distributed environment. The service is designed to perform a formal and objective proof of the quality using Behavior as a Code paradigm every time changes are applied to your environment. This examples:
 
-* show https://assay.it and [Everything is Continuous workflow](https://doc.assay.it//docs/workflows/everything-is-continuous) in actions;
+* show https://assay.it and [Everything is Continuous workflow](https://assay.it/doc/case-study/everything-is-continuous) in actions;
 
 * defines the [GitHub Actions](.github/workflows/check.yml) that checks the quality of proposed changes. It is executed for each pull request and its commits;
 
@@ -56,7 +55,7 @@ We build https://assay.it to help developers with quality assessment of microser
 
 * use TypeScript and AWS CDK to implement [Infrastructure as a Code](cloud) for the serverless application;
 
-* [Behavior as a Code](test) for the quality assessment of the the serverless application.
+* [Behavior as a Code contracts](assay) for the quality assessment of the the serverless application.
 
 
 ## Getting Started
@@ -72,7 +71,7 @@ We build https://assay.it to help developers with quality assessment of microser
 |   ├── index.ts       // Infrastructure as a Code
 |   └── ...
 |
-├── test               // Behavior as a Code
+├── assay              // Behavior as a Code
 |   ├── elementary.go  // shows unit-test like quality assessment
 |   ├── minimal.go     // a minimal BaC suite
 |   ├── recursive.go   // demonstrates ability of recursive scenarios
@@ -106,15 +105,15 @@ GitHub Actions use our Infrastructure as a Code to continuously deploy changes t
 
 ## Next Steps
 
-1. Study the [core concepts](https://doc.assay.it/docs/core) behind and [coding style](https://doc.assay.it/docs/core/style) of Behavior as a Code paradigm
+1. Study the [core concepts](https://assay.it/doc/core) behind and [coding style](https://assay.it/doc/core/style) of Behavior as a Code paradigm
 
-2. This example implements an advanced Behavior as a Code at [test](test) folder. Use them as an annotated reference
-  * [elementary.go](test/elementary.go) shows unit-test like quality assessment;
-  * [minimal.go](test/minimal.go) a minimal BaC suite, use it as template for your work;
-  * [scenario.go](test/scenario.go) shows an ability to execute a behavioral scenario, where chain of requests models a typical consumer behavior.
-  * [recursive.go](test/recursive.go) demonstrates ability of recursive behavior scenarios.
+2. This example implements an advanced Behavior as a Code at [assay](assay) folder. Use them as an annotated reference
+  * [elementary.go](assay/elementary.go) shows unit-test like quality assessment;
+  * [minimal.go](assay/minimal.go) a minimal BaC suite, use it as template for your work;
+  * [scenario.go](assay/scenario.go) shows an ability to execute a behavioral scenario, where chain of requests models a typical consumer behavior.
+  * [recursive.go](assay/recursive.go) demonstrates ability of recursive behavior scenarios.
 
-3. Check our documentations https://doc.assay.it/
+3. Check our documentations https://assay.it/doc
 
 ## Issues
 

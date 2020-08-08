@@ -8,12 +8,12 @@ environment. We need an ability to quantitatively evaluate and trade-off archite
 to ensure quality of the solutions.
 
 https://assay.it is designed to perform a formal (objective) proofs of the quality
-using Behavior as a Code paradigm. It connects cause-and-effect (Given/When/Then) to
+using Behavior as a Code contracts. It connects cause-and-effect (Given/When/Then) to
 the networking concepts (Input/Process/Output). The expected behavior of each network
-component is declared using simple Golang program (test suite).
+component is declared using simple Golang program.
 
-Here is an example suite that illustrates an ability to apply unit-test like strategy
-on quality assessment. The suite implements a test cases as function of the form:
+Here is an example suite that illustrates an ability to apply contract testing of
+quality assessment strategy. The contract implements a test cases as function of the form:
 
   func TestAbc() gurl.Arrow
 
@@ -31,23 +31,21 @@ Let's look on the following example!
 
 */
 
-// each suite is always declared as main package.
-package main
+// Package test is a standard Golang declaration. It groups set of logically related contracts.
+package assay
 
 /*
 
 Standard Golang import declaration.
 
 However, assay.it restricts usage of some package.
-Please check doc.assay.it for details of allowed packages.
+Please check https://assay.it/doc for details of allowed packages.
 We are constantly looking for your feedback, please open an issue to us.
 */
 import (
-	"fmt"
 
 	//
 	// the toolkit for test suites development that provides various helper api.
-	"github.com/assay-it/tk"
 
 	//
 	// gurl library is a class of High Order Component which can do http requests
@@ -59,48 +57,6 @@ import (
 	ƒ "github.com/fogfish/gurl/http/recv"
 	ø "github.com/fogfish/gurl/http/send"
 )
-
-/*
-
-Golang type declaration.
-
-It is possible to declare any types as part of the suite implementation.
-The type declartion can be offloaded to shared library and re-used between
-suites, please see doc.assay.it for details.
-*/
-
-// News a type used by the example application. This type models a core data of
-// the application and used by suites to validates correctness of outputs.
-type News struct {
-	ID    string `json:"id"`
-	Title string `json:"title"`
-}
-
-// List is a sequence of news, a core type of example application.
-type List []News
-
-// Value and other functions implements sort.Interface and gurl.Ord interfaces
-// for List data type. The implementation of these interfaces is mandatory if
-// suite asserts and validates content of the sequence with ƒ.Seq.
-func (seq List) Value(i int) interface{} { return seq[i] }
-func (seq List) Len() int                { return len(seq) }
-func (seq List) Swap(i, j int)           { seq[i], seq[j] = seq[j], seq[i] }
-func (seq List) Less(i, j int) bool      { return seq[i].ID < seq[j].ID }
-func (seq List) String(i int) string     { return seq[i].ID }
-
-/*
-
-Suite constants and other global variables
-
-*/
-
-// Settings of assay.it allows developers to customize suite via environment
-// variables (See settings of repository). These variables are injected at runtime.
-// Here, the example application requires a CONFIG_DOMAIN variable, which declares
-// domain name of SUT. The assay toolkit api is used to fetch this variable form environment.
-// The subdomain name is deducted from auto variable BUILD_ID. It corresponds to Pull
-// Request Number for any assessment originated by WebHook.
-var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("CONFIG_DOMAIN", ""))
 
 /*
 
@@ -124,15 +80,15 @@ func TestNewsJSON() gurl.Arrow {
 		"When" executes key actions about the interaction with remote component
 
 		gurl library defines a rich techniques to hide the networking complexity using
-		higher-order-functions and its compositions. See the doc.assay.it for details
-		about api or gurl documentation at github.com
+		higher-order-functions and its compositions.
+		See https://assay.it/doc/core for details about api
 	*/
 
 	// gurl.HTTP builds higher-order HTTP closure, so called gurl.Arrow, from
 	// primitive elements.
 	return gurl.HTTP(
 		// module ø (gurl/http/send) defines function to declare HTTP request.
-		// See the doc.assay.it for details about module ø or gurl documentation at github.com
+		// See the https://assay.it/doc/core for details about module ø
 
 		// declares HTTP method and destination URL
 		ø.GET("https://%s/news", host),
@@ -143,7 +99,7 @@ func TestNewsJSON() gurl.Arrow {
 
 		// module ƒ (gurl/http/recv) defines function to validate correctness of HTTP response.
 		// Each ƒ constrain might terminate execution of consequent ƒ's if it expectation fails.
-		// See the doc.assay.it for details about module ƒ or gurl documentation at github.com
+		// See the https://assay.it/doc/core for details about module ƒ
 
 		// requires HTTP Status Code to be 200 OK
 		ƒ.Code(gurl.StatusCodeOK),
@@ -234,6 +190,3 @@ func TestItemNotFound() gurl.Arrow {
 		ƒ.Code(gurl.StatusCodeNotFound),
 	)
 }
-
-// empty main function is a required for each suite, otherwise we cannot compile it.
-func main() {}
