@@ -1,7 +1,7 @@
 # Advanced Suite Sample
 
 Here is an example application to show https://assay.it in actions. It shows a reference
-implementation of [Everything is Continuous](https://assay.it/case%20study/continuous%20deployment/2020/07/01/everything-is-continuos) workflow, shows advanced usage of Behavior as a Code paradigm and integration with CI/CD. Please take also a look into [simple suite sample](https://github.com/assay-it/sample.assay.it).
+implementation of [Everything is Continuous](https://assay.it/2020/07/01/everything-is-continuos/) workflow, shows advanced usage of Behavior as a Code paradigm and integration with CI/CD. Please take also a look into [simple suite sample](https://github.com/assay-it/sample.assay.it).
 
 
 ## Inspiration
@@ -18,7 +18,7 @@ Behavior as a Code contracts. It connects cause-and-effect (Given/When/Then) to 
 concepts (Input/Process/Output). The expected behavior of each network component is declared
 using simple Golang program.
 
-This example is inspired by the blog post [Everything is Continuous](https://assay.it/case%20study/continuous%20deployment/2020/07/01/everything-is-continuos) and provides the reference implementation and the guidance about of the eponymous [workflow](https://assay.it/doc/case-study/everything-is-continuous). 
+This example is inspired by the blog post [Everything is Continuous](https://assay.it/2020/07/01/everything-is-continuos/) and provides the reference implementation and the guidance about of the eponymous [workflow](https://assay.it/doc/case-study/everything-is-continuous). 
 
 
 ## Everything is Continuous
