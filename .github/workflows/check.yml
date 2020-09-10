@@ -75,12 +75,12 @@ jobs:
             run -- cdk deploy example-v${{ github.event.number }} \
             -c vsn=v${{ github.event.number }} \
             -c domain=${{ secrets.CONFIG_DOMAIN }} \
-            --output-file output.json
+            --output-file $GITHUB_WORKSPACE/output.json
 
       - name: discover
         id: discover
         run: |
-          echo ::set-output name=target::"$(jq -r '.\"example-v${{ github.event.number }}\".Foo' < output.json)"
+          echo ::set-output name=target::"$(jq -r '.\"example-v${{ github.event.number }}\".Foo' < $GITHUB_WORKSPACE/output.json)"
 
       ##
       ## GitHub Actions is integrated with https://assay.it WebHook API.
