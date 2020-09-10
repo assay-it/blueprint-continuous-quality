@@ -74,7 +74,8 @@ jobs:
           npm -C src/github.com/${{ github.repository }}/cloud \
             run -- cdk deploy example-v${{ github.event.number }} \
             -c vsn=v${{ github.event.number }} \
-            -c domain=${{ secrets.CONFIG_DOMAIN }}
+            -c domain=${{ secrets.CONFIG_DOMAIN }} \
+            --output-file output.json
 
       ##
       ## GitHub Actions is integrated with https://assay.it WebHook API.
@@ -82,4 +83,5 @@ jobs:
         with:
           secret: ${{ secrets.ASSAY_SECRET_KEY }}
           api: latest.assay.it
+          target: `jq -r '.example-v${{ github.event.number }}.Foo' < output.json`
 
