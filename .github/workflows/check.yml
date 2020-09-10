@@ -74,12 +74,12 @@ jobs:
           npm -C src/github.com/${{ github.repository }}/cloud \
             run -- cdk deploy example-v${{ github.event.number }} \
             -c vsn=v${{ github.event.number }} \
-            --outputs-file stack.json
+            --outputs-file $GITHUB_WORKSPACE/stack.json
 
       - name: discover
         id: discover
         run: |
-          echo ::set-output name=target::"$(jq -r '.\"example-v${{ github.event.number }}\".Foo' < stack.json)"
+          echo ::set-output name=target::"$(jq -r '.\"example-v${{ github.event.number }}\".Foo' < $GITHUB_WORKSPACE/stack.json)"
 
       ##
       ## GitHub Actions is integrated with https://assay.it WebHook API.
