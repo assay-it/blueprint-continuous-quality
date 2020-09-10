@@ -57,10 +57,6 @@ pure.join(stack,
       els.addMethod('ANY', eff.func)
     }
   )
-  .effect(
-    eff =>
-      new cdk.CfnOutput(stack, 'Foo', { value: eff.rest.url })
-  )
 )
 
 
