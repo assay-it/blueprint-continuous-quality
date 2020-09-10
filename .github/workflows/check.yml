@@ -79,7 +79,7 @@ jobs:
       - name: discover
         id: discover
         run: |
-          echo ::set-output name=target::"$(jq -r '.[\"example-v${{ github.event.number }}\"] | to_entries | .[] | select(.key|test([\"GatewayEndpoint.*\"])) | .value ' < $GITHUB_WORKSPACE/stack.json)"
+          echo ::set-output name=target::$(jq -r '.["example-v${{ github.event.number }}"] | to_entries | .[] | select(.key|test("GatewayEndpoint.*")) | .value ' < $GITHUB_WORKSPACE/stack.json)
 
       ##
       ## GitHub Actions is integrated with https://assay.it WebHook API.
