@@ -15,7 +15,7 @@ import (
 // TestNews endpoint
 func TestNews() gurl.Arrow {
 	return gurl.HTTP(
-		ø.GET("https://%s/news", host),
+		ø.GET("%s/news", host),
 		ƒ.Code(gurl.StatusCodeOK),
 	)
 }

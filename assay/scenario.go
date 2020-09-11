@@ -41,7 +41,7 @@ func (s *Scenario) news() gurl.Arrow {
 	var seq List
 
 	return gurl.HTTP(
-		ø.GET("https://%s/news", host),
+		ø.GET("%s/news", host),
 		ƒ.Code(gurl.StatusCodeOK),
 		ƒ.Recv(&seq),
 		// So far, the case has successfully received the sequence of news into seq variable.
@@ -77,7 +77,7 @@ func (s *Scenario) item(id *string) gurl.Arrow {
 	var news News
 
 	return gurl.HTTP(
-		ø.GET("https://%s/news/%s", host, id),
+		ø.GET("%s/news/%s", host, id),
 		ƒ.Code(gurl.StatusCodeOK),
 		ƒ.ServedJSON(),
 		ƒ.Recv(&news),

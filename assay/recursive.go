@@ -54,7 +54,7 @@ func TestForEach() gurl.Arrow {
 // into seq variable
 func news(seq *List) gurl.Arrow {
 	return gurl.HTTP(
-		ø.GET("https://%s/news", host),
+		ø.GET("%s/news", host),
 		ƒ.Code(gurl.StatusCodeOK),
 		ƒ.Recv(seq),
 	)
@@ -83,7 +83,7 @@ func item(expect News) gurl.Arrow {
 	var item News
 
 	return gurl.HTTP(
-		ø.GET("https://%s/news/%s", host, expect.ID),
+		ø.GET("%s/news/%s", host, expect.ID),
 		ƒ.Code(gurl.StatusCodeOK),
 		ƒ.ServedJSON(),
 		ƒ.Recv(&item),

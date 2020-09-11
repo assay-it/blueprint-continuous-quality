@@ -40,5 +40,5 @@ func (seq List) String(i int) string     { return seq[i].ID }
 // Settings of assay.it allows developers to customize suite via environment
 // variables (See settings of repository). These variables are injected at runtime.
 // Here we are using utility which is capable to deduct a correct target from
-// one of these variables BUILD_ENDPOINT, BUILD_ID and BUILD_DOMAIN
+// one of these variables BUILD_ENDPOINT, BUILD_ID and CONFIG_ENDPOINT
 var host = tk.Host("")
