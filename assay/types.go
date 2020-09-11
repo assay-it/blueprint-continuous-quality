@@ -12,8 +12,6 @@ Please see https://assay.it/doc/core for details.
 package assay
 
 import (
-	"fmt"
-
 	"github.com/assay-it/tk"
 )
 
@@ -41,8 +39,6 @@ func (seq List) String(i int) string     { return seq[i].ID }
 
 // Settings of assay.it allows developers to customize suite via environment
 // variables (See settings of repository). These variables are injected at runtime.
-// Here, the example application requires a CONFIG_DOMAIN variable, which declares
-// domain name of SUT. The assay toolkit api is used to fetch this variable form environment.
-// The subdomain name is deducted from auto variable BUILD_ID. It corresponds to Pull
-// Request Number for any assessment originated by WebHook.
-var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("CONFIG_DOMAIN", ""))
+// Here we are using utility which is capable to deduct a correct target from
+// one of these variables BUILD_ENDPOINT, BUILD_ID and BUILD_DOMAIN
+var host = tk.Host("")
