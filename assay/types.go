@@ -12,7 +12,7 @@ Please see https://assay.it/doc/core for details.
 package assay
 
 import (
-	"github.com/assay-it/tk"
+	"github.com/assay-it/sdk-go/assay"
 )
 
 // News a type used by the example application. This type models a core data of
@@ -41,4 +41,4 @@ func (seq List) String(i int) string     { return seq[i].ID }
 // variables (See settings of repository). These variables are injected at runtime.
 // Here we are using utility which is capable to deduct a correct target from
 // one of these variables BUILD_ENDPOINT, BUILD_ID and CONFIG_ENDPOINT
-var host = tk.Host("")
+var host = assay.Host("")
