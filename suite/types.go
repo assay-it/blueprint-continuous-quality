@@ -9,7 +9,7 @@ declaration and re-used between suites.
 Please see https://assay.it/doc/core for details.
 */
 
-package assay
+package suite
 
 import (
 	"github.com/assay-it/sdk-go/assay"
@@ -25,9 +25,9 @@ type News struct {
 // List is a sequence of news, a core type of example application.
 type List []News
 
-// Value and other functions implements sort.Interface and gurl.Ord interfaces
+// Value and other functions implements sort.Interface and assay.Ord interfaces
 // for List data type. The implementation of these interfaces is mandatory if
-// suite asserts and validates content of the sequence with ƒ.Seq.
+// suite asserts and validates content of the sequence with c.Seq.
 //
 // Please see https://assay.it/doc/core/style#focus-on-the-sequence
 //
