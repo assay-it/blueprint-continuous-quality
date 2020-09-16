@@ -1,4 +1,4 @@
-# Advanced Suite Sample
+# Advanced Example - Behavior as a Code suite
 
 Here is an example application to show https://assay.it in actions. It shows a reference
 implementation of [Everything is Continuous](https://assay.it/case%20study/continuous%20deployment/2020/07/01/everything-is-continuos) workflow, shows advanced usage of Behavior as a Code paradigm and integration with CI/CD. Please take also a look into [simple suite sample](https://github.com/assay-it/sample.assay.it).
