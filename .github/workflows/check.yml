@@ -69,6 +69,8 @@ jobs:
       ##
       ## The deployment is orchestrated with AWS CDK. GitHub Actions
       ## deploys a unique cloud formation stack for each Pull Request.
+      ## Successful deployment writes destination address of api to
+      ## stack.json file.
       - name: deploy
         run: |
           npm -C src/github.com/${{ github.repository }}/cloud \
@@ -76,6 +78,8 @@ jobs:
             -c vsn=v${{ github.event.number }} \
             --outputs-file $GITHUB_WORKSPACE/stack.json
 
+      ##
+      ## it is required to discover url of newly deployed api before the testing   
       - name: discover
         id: discover
         run: |
@@ -83,6 +87,7 @@ jobs:
 
       ##
       ## GitHub Actions is integrated with https://assay.it WebHook API.
+      ## It takes secret key and rest api url
       - uses: assay-it/github-actions-webhook@latest
         with:
           secret: ${{ secrets.ASSAY_SECRET_KEY }}

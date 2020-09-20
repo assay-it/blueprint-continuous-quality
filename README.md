@@ -47,8 +47,8 @@ Exactly same quality assessment technique is applied to the `main` branch and ea
 
 
 **Let's have a look on the content of repository**:
-* [News Feed](newsfeed.go) is a fictional serverless that implement REST API using Golang;
-* [Infrastructure as a Code](cloud) uses TypeScript and AWS CDK to specify a cloud runtime environment for the application;
+* [News Feed](newsfeed.go) is a fictional serverless application that implement REST API using Golang;
+* [Infrastructure as a Code](cloud) uses TypeScript and AWS CDK to declare and deploy a cloud runtime environment for the application;
 * [GitHub Actions Workflow](.github/workflows/check.yml) orchestrates a typical CI/CD activities - building, deploying and quality assurance for each pull request (commit);
 * [Behavior as a Code suites](suite) declares a desired behavior (contract) of the api, assay.it uses these code to confirm the quality.
 
