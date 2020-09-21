@@ -91,6 +91,5 @@ jobs:
       - uses: assay-it/github-actions-webhook@latest
         with:
           secret: ${{ secrets.ASSAY_SECRET_KEY }}
-          api: latest.assay.it
           target: ${{ steps.discover.outputs.target }}
 
