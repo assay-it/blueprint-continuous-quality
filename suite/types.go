@@ -9,12 +9,10 @@ declaration and re-used between suites.
 Please see https://assay.it/doc/core for details.
 */
 
-package assay
+package suite
 
 import (
-	"fmt"
-
-	"github.com/assay-it/tk"
+	"github.com/assay-it/sdk-go/assay"
 )
 
 // News a type used by the example application. This type models a core data of
@@ -27,9 +25,9 @@ type News struct {
 // List is a sequence of news, a core type of example application.
 type List []News
 
-// Value and other functions implements sort.Interface and gurl.Ord interfaces
+// Value and other functions implements sort.Interface and assay.Ord interfaces
 // for List data type. The implementation of these interfaces is mandatory if
-// suite asserts and validates content of the sequence with ƒ.Seq.
+// suite asserts and validates content of the sequence with c.Seq.
 //
 // Please see https://assay.it/doc/core/style#focus-on-the-sequence
 //
@@ -41,8 +39,6 @@ func (seq List) String(i int) string     { return seq[i].ID }
 
 // Settings of assay.it allows developers to customize suite via environment
 // variables (See settings of repository). These variables are injected at runtime.
-// Here, the example application requires a CONFIG_DOMAIN variable, which declares
-// domain name of SUT. The assay toolkit api is used to fetch this variable form environment.
-// The subdomain name is deducted from auto variable BUILD_ID. It corresponds to Pull
-// Request Number for any assessment originated by WebHook.
-var host = fmt.Sprintf("v%s.%s", tk.Env("BUILD_ID", ""), tk.Env("CONFIG_DOMAIN", ""))
+// Here we are using utility which is capable to deduct a correct target from
+// one of these variables BUILD_ENDPOINT, BUILD_ID and CONFIG_ENDPOINT
+var host = assay.Host("")
