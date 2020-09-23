@@ -1,9 +1,11 @@
-# Advanced Example - Behavior as a Code suite
+<p align="center">
+  <img src="./blueprint.gif" height="240" />
+  <h3 align="center">Blueprint: Continuous Proof of the Quality</h3>
+  <p align="center"><strong>A simple strategy on continuous quality automation with CI/CD system.</strong></p>
 
-Learn about quality assessments of Serverless applications with https://assay.it. This example shows advanced usage of Behavior as a Code paradigm, its cooperation with CI/CD system to implement [Continuous proof of the quality](https://assay.it/case%20study/continuous%20deployment/2020/07/01/everything-is-continuos).
-
-
-## Inspiration
+  <p align="center">
+  </p>
+</p>
 
 Quality assurance of serverless applications is more complex than doing it for other runtimes. Engineering teams spend twice as much time maintaining testing environments and mocks of cloud dependencies instead of building a loyal relationship with their customers, assay.it has you covered.
 
@@ -37,7 +39,7 @@ Exactly same quality assessment technique is applied to the `main` branch and ea
 
 1. **Sign up for [assay.it](https://assay.it)** with your GitHub developer account. Initially, the service requires only access to your public profile, public repositories and access to commit status of connected repositories. Later, you can enable quality assessments of private repositories.
 
-2. **Fork [assay-it/example.assay.it](https://github.com/assay-it/example.assay.it)** to your own GitHub account and then add to the assay.it workspace. The example implements advanced quality assessment suites using [category pattern](https://assay.it/doc/core/category) to connect cause-and-effect (Given/When/Then) with the networking concepts (Input/Process/Output). Just write [pure functional code](https://assay.it/doc/core) instead of clicking through UI or maintaining endless XML, YAML or JSON documents.
+2. **Fork [assay-it/blueprint-continuous-quality](https://github.com/assay-it/blueprint-continuous-quality)** to your own GitHub account and then add to the assay.it workspace. The example implements advanced quality assessment suites using [category pattern](https://assay.it/doc/core/category) to connect cause-and-effect (Given/When/Then) with the networking concepts (Input/Process/Output). Just write [pure functional code](https://assay.it/doc/core) instead of clicking through UI or maintaining endless XML, YAML or JSON documents.
 
 3. Either create a new **AWS Account** or obtain an access to existing one. You shall be able to create/delete AWS resources (e.g. IAM roles, Lambda functions, API Gateway, etc). AWS account is required to reveal the whole essence of this example. Ultimately, you are deploying a fictional serverless application and validating its deployment. `AWS_ACCESS_KEY` and `AWS_SECRET_ACCESS_KEY` are required to enable deployment by GitHub Actions. Store these credentials to secret key vault at your fork settings (Your Fork > Settings > Secrets).
 
